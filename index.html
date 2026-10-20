@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compêndio de Combate Altíssimo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#161310;
+    --card:#211c17;
+    --card-border:#3a322a;
+    --parchment:#e9dfc9;
+    --parchment-dim:#b8ac93;
+    --gold:#c9a04d;
+
+    --c-berrian:#4a7c59;
+    --c-matthyas:#8b5fbf;
+    --c-surina:#a83232;
+    --c-aethelflaed:#7e8c54;
+    --c-nephile:#ffee8c;
+    --c-thireon:#b8793a;
+    --c-mila:#4a8f8f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ink);
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(201,160,77,0.06), transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(74,143,143,0.05), transparent 40%);
+    color:var(--parchment);
+    font-family:'EB Garamond', serif;
+    font-size:18px;
+    line-height:1.5;
+  }
+  h1,h2,h3,.mono{font-family:'Cinzel', serif;}
+  .mono-num{font-family:'JetBrains Mono', monospace;}
+
+  header{
+    padding:48px 24px 28px;
+    text-align:center;
+    border-bottom:1px solid var(--card-border);
+  }
+  header .eyebrow{
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    font-size:12px;
+    color:var(--gold);
+    font-family:'JetBrains Mono',monospace;
+  }
+  header h1{
+    font-size:clamp(28px,5vw,44px);
+    margin:10px 0 6px;
+    color:var(--parchment);
+  }
+  header p{color:var(--parchment-dim); max-width:640px; margin:0 auto; font-size:17px;}
+
+  .wrap{max-width:920px; margin:0 auto; padding:24px 16px 80px;}
+
+  .quickref{
+    margin:24px 0 40px;
+    border:1px solid var(--card-border);
+    border-radius:6px;
+    overflow-x:auto;
+    background:var(--card);
+  }
+  table{width:100%; border-collapse:collapse; min-width:640px;}
+  th,td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--card-border); font-size:15px;}
+  th{font-family:'JetBrains Mono',monospace; text-transform:uppercase; font-size:11px; letter-spacing:0.08em; color:var(--parchment-dim);}
+  tr:last-child td{border-bottom:none;}
+  td.num{font-family:'JetBrains Mono',monospace;}
+  .dot{display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:8px;}
+
+  nav.tabs{
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin-bottom:24px;
+  }
+  nav.tabs button{
+    font-family:'Cinzel',serif;
+    background:transparent;
+    border:1px solid var(--card-border);
+    color:var(--parchment-dim);
+    padding:9px 16px;
+    border-radius:20px;
+    cursor:pointer;
+    font-size:14px;
+    transition:all .15s ease;
+    display:inline-flex; align-items:center; gap:7px;
+  }
+  .tab-dot{width:8px; height:8px; border-radius:50%; display:inline-block; opacity:.8;}
+  nav.tabs button.active .tab-dot{opacity:1; box-shadow:0 0 6px currentColor;}
+  nav.tabs button:hover{color:var(--parchment); border-color:var(--parchment-dim);}
+  nav.tabs button.active{
+    color:var(--ink);
+    background:var(--accent, var(--gold));
+    border-color:var(--accent, var(--gold));
+    font-weight:700;
+  }
+
+  .statblock{display:none;}
+  .statblock.active{display:block; animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent 200px), var(--card);
+    border:1px solid var(--card-border);
+    border-top:4px solid var(--accent);
+    border-radius:10px;
+    padding:26px 28px 30px;
+    box-shadow:0 10px 30px -14px var(--accent, rgba(0,0,0,0.5)), 0 10px 30px -18px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.02) inset;
+  }
+  .card .name{font-size:26px; margin:0; color:var(--parchment);}
+  .card .subtitle{color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:13px; letter-spacing:.04em; margin-top:2px;}
+  hr.rule{border:none; border-top:1px solid var(--card-border); margin:16px 0;}
+  hr.rule.thick{border-top:2px solid var(--accent); opacity:.5;}
+
+  .topline{font-size:15px; color:var(--parchment-dim); margin:4px 0;}
+  .topline b{color:var(--parchment); font-weight:600;}
+
+  .hp-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:10px 0 4px;}
+  .hp-tracker{
+    display:flex; align-items:center; gap:8px;
+    font-size:15px; color:var(--parchment-dim);
+  }
+  .hp-tracker b{color:var(--parchment); font-weight:600;}
+  .hp-tracker input{
+    width:64px; background:rgba(255,255,255,0.05); border:1px solid var(--card-border);
+    color:var(--parchment); font-family:'JetBrains Mono',monospace; font-size:16px;
+    border-radius:4px; padding:4px 6px; text-align:center;
+  }
+  .hp-tracker input:focus{outline:1px solid var(--accent);}
+  .hp-bar{
+    width:110px; height:8px; background:rgba(255,255,255,0.08);
+    border-radius:4px; overflow:hidden; border:1px solid var(--card-border);
+  }
+  .hp-bar-fill{height:100%; transition:width .2s ease;}
+  .long-rest-btn{
+    font-family:'JetBrains Mono',monospace; font-size:12px;
+    background:rgba(201,160,77,0.1); border:1px solid var(--gold); color:var(--gold);
+    padding:6px 12px; border-radius:5px; cursor:pointer; letter-spacing:.02em;
+  }
+  .long-rest-btn:hover{background:rgba(201,160,77,0.2);}
+  .short-rest-btn{
+    font-family:'JetBrains Mono',monospace; font-size:12px;
+    background:rgba(180,90,60,0.1); border:1px solid #b45a3c; color:#d68a68;
+    padding:6px 12px; border-radius:5px; cursor:pointer; letter-spacing:.02em;
+  }
+  .short-rest-btn:hover{background:rgba(180,90,60,0.2);}
+
+  .init-input{
+    width:56px; background:rgba(255,255,255,0.05); border:1px solid var(--card-border);
+    color:var(--parchment); font-family:'JetBrains Mono',monospace; font-size:16px;
+    border-radius:4px; padding:4px 6px; text-align:center; font-weight:700;
+  }
+  .init-input:focus{outline:1px solid var(--accent);}
+
+  .abilities{
+    display:grid; grid-template-columns:repeat(6,1fr); gap:6px;
+    margin:18px 0;
+  }
+  .ability{
+    text-align:center; background:rgba(255,255,255,0.03);
+    border:1px solid var(--card-border); border-radius:6px; padding:9px 4px;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .ability:hover{border-color:var(--accent); transform:translateY(-1px);}
+  .ability .lab{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--parchment-dim);}
+  .ability .val{font-family:'JetBrains Mono',monospace; font-size:17px; font-weight:700; color:var(--parchment); margin-top:2px;}
+  .ability .mod{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent);}
+
+  .section-title{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--accent); margin:24px 0 10px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .section-title::before{content:''; width:14px; height:1px; background:var(--accent); opacity:.6;}
+  .section-title::after{content:''; flex:1; height:1px; background:var(--card-border);}
+  .section-title.consult{color:var(--parchment-dim);}
+  .section-title.consult::before{background:var(--parchment-dim);}
+  .entry{margin:8px 0; font-size:16px;}
+  .entry b{color:var(--parchment); font-family:'Cinzel',serif; font-weight:600; font-size:15px;}
+  .entry .desc{color:var(--parchment-dim);}
+  .entry .desc .hl{color:var(--parchment); font-weight:inherit;}
+  .hit-badge{
+    display:inline-block; font-family:'JetBrains Mono',monospace; font-size:12px;
+    background:rgba(255,255,255,0.06); color:var(--accent); border:1px solid var(--accent);
+    border-radius:4px; padding:1px 7px; margin-left:6px; vertical-align:middle;
+  }
+
+  .tactic{
+    margin-top:10px; padding:14px 16px; border-radius:5px;
+    background:rgba(255,255,255,0.03); border-left:3px solid var(--accent);
+    color:var(--parchment-dim); font-size:15.5px;
+  }
+  .tactic b{color:var(--parchment);}
+
+  /* Conditions */
+  details.cond-details{
+    border:1px solid var(--card-border); border-radius:6px; margin:14px 0; background:rgba(255,255,255,0.02);
+  }
+  details.cond-details summary{
+    cursor:pointer; padding:10px 14px; font-family:'JetBrains Mono',monospace; font-size:12px;
+    text-transform:uppercase; letter-spacing:.08em; color:var(--accent);
+    display:flex; justify-content:space-between; align-items:center; gap:10px; list-style:none;
+  }
+  details.cond-details summary::-webkit-details-marker{display:none;}
+  details.cond-details summary::before{content:'▸'; margin-right:4px;}
+  details.cond-details[open] summary::before{content:'▾';}
+  .cond-summary-tags{display:flex; gap:5px; flex-wrap:wrap; margin-left:auto;}
+  .cond-summary-tag{
+    background:var(--accent); color:var(--ink); font-weight:700; border-radius:20px;
+    padding:2px 9px; font-size:11px; text-transform:none; letter-spacing:0;
+  }
+  .cond-summary-none{color:var(--parchment-dim); font-family:'EB Garamond',serif; font-style:italic; font-size:13px; text-transform:none;}
+  .conditions-box{display:flex; flex-wrap:wrap; gap:8px; padding:0 14px 14px;}
+  .cond-chip{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px;
+    border:1px solid var(--card-border); color:var(--parchment-dim);
+    padding:5px 11px; border-radius:20px; cursor:pointer; transition:all .15s ease;
+  }
+  .cond-chip:hover{border-color:var(--parchment-dim); color:var(--parchment);}
+  .cond-chip.active{background:var(--accent); border-color:var(--accent); color:var(--ink); font-weight:700;}
+
+  /* Race traits collapsible */
+  details.race-details{
+    border:1px solid var(--card-border); border-radius:6px; margin:14px 0; background:rgba(255,255,255,0.015);
+  }
+  details.race-details summary{
+    cursor:pointer; padding:10px 14px; font-family:'JetBrains Mono',monospace; font-size:12px;
+    text-transform:uppercase; letter-spacing:.08em; color:var(--parchment-dim); list-style:none;
+  }
+  details.race-details summary::-webkit-details-marker{display:none;}
+  details.race-details summary::before{content:'▸ '; }
+  details.race-details[open] summary::before{content:'▾ ';}
+  .race-traits-box{padding:0 14px 14px;}
+
+  /* Resources */
+  .resources-box{
+    margin:8px 0 4px; padding:14px 16px; border-radius:6px;
+    background:linear-gradient(135deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01));
+    border:1px solid var(--card-border);
+  }
+  .res-group{margin:8px 0;}
+  .res-group:first-child{margin-top:0;}
+  .res-group .res-label{
+    font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--parchment-dim);
+    display:block; margin-bottom:6px; text-transform:uppercase; letter-spacing:.04em;
+  }
+  .res-dots{display:flex; gap:7px; flex-wrap:wrap;}
+  .res-dot{
+    width:16px; height:16px; border-radius:50%;
+    border:2px solid var(--accent);
+    background:var(--accent);
+    cursor:pointer; transition:background .15s ease; display:inline-block;
+  }
+  .res-dot.used{background:transparent;}
+
+  /* Wild shape picker */
+  .wildshape-picker{display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 16px;}
+  .ws-btn{
+    font-family:'Cinzel',serif; font-size:13.5px;
+    background:rgba(255,255,255,0.03); border:1px solid var(--card-border); color:var(--parchment-dim);
+    padding:8px 14px; border-radius:20px; cursor:pointer; transition:all .15s ease;
+    display:inline-flex; align-items:center; gap:7px;
+  }
+  .ws-btn:hover{border-color:var(--accent); color:var(--parchment);}
+  .ws-btn.active{background:var(--accent); border-color:var(--accent); color:var(--ink); font-weight:700;}
+  .ws-nd{font-family:'JetBrains Mono',monospace; font-size:10.5px; opacity:.75;}
+  .ws-card{
+    border:1px solid var(--accent); border-radius:8px; padding:16px 18px;
+    background:rgba(255,255,255,0.03); margin-bottom:6px;
+  }
+  .ws-card-head{display:flex; align-items:baseline; gap:10px; margin-bottom:8px;}
+  .ws-card-head b{font-family:'Cinzel',serif; font-size:18px; color:var(--parchment);}
+  .ws-env{font-size:12.5px; color:var(--parchment-dim); font-style:italic;}
+  .ws-hp-row{justify-content:flex-start; margin:10px 0 16px; flex-wrap:nowrap;}
+  .ws-hp-row .hp-tracker{flex-wrap:nowrap;}
+  .ws-abilities{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:10px 0; max-width:280px;}
+  .ws-empty{color:var(--parchment-dim); font-style:italic; font-size:15px; padding:6px 2px;}
+
+  /* Spells */
+  details.spell{
+    border:1px solid var(--card-border); border-radius:5px;
+    margin:6px 0; background:rgba(255,255,255,0.02);
+  }
+  details.spell summary{
+    cursor:pointer; padding:8px 12px; font-family:'Cinzel',serif; font-size:15px;
+    color:var(--parchment); display:flex; justify-content:space-between; align-items:center;
+    list-style:none;
+  }
+  details.spell summary::-webkit-details-marker{display:none;}
+  details.spell summary::after{content:'+'; color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:16px;}
+  details.spell[open] summary::after{content:'−';}
+  details.spell .lvl{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent); font-weight:400; margin-left:8px;}
+  details.spell p{margin:0 12px 12px; color:var(--parchment-dim); font-size:15px;}
+  .spell-group-title{font-size:13px; color:var(--parchment-dim); font-family:'JetBrains Mono',monospace; margin:14px 0 4px; text-transform:uppercase; letter-spacing:.06em;}
+
+  footer{text-align:center; color:var(--parchment-dim); font-size:13px; padding:20px; opacity:.6;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Compêndio Tático · Nível 5</div>
+  <h1>Compêndio de Combate Altíssimo</h1>
+  <p>Ficha online interativa de cada personagem — use durante a sessão pra acompanhar PV, recursos, condições e ações disponíveis, sem se perder entre as várias possibilidades de cada turno.</p>
+</header>
+
+<div class="wrap">
+
+  <nav class="tabs" id="tabs"></nav>
+
+  <div id="blocks"></div>
+
+</div>
+
+<footer>Nível 5 · Proficiência +3 · monta lentamente conforme o grupo evolui</footer>
+
+<script>
+const CONDITIONS = ['Caído','Amedrontado','Envenenado','Paralisado','Concentração','Invisível'];
+
+const chars = [
+{
+  id:'berrian', accent:'var(--c-berrian)', name:'Berrian Liadon', subtitle:'Guardião (Vigilante das Sombras) 6 · Elfo Silvestre',
+  ac:16, hp:46, speed:'13,5m (+3m no 1º turno) · escalada 13,5m · natação 13,5m', initValue:6, initFormula:'Des +4, Vigilante das Sombras +2',
+  abilities:[['FOR',12,'+1'],['DES',18,'+4'],['CON',13,'+1'],['INT',8,'-1'],['SAB',15,'+2'],['CAR',10,'+0']],
+  saves:'Destreza +7, Força +4',
+  classe:'Guardião Vigilante das Sombras',
+  classTraits:[
+    ['Maestria em Armas','Maestria em 2 tipos de armas (pode trocar após descanso longo) — aplicada no Arco Curto e na Adaga.'],
+    ['Estilo de Luta: Arqueiaria','+2 para acertar com ataques à distância (já contado nos ataques).'],
+    ['Especialista','Dobra a proficiência numa perícia (Furtividade) — por isso o +10 na perícia.'],
+    ['+2 Idiomas','Dois idiomas extras à escolha (nível 2).'],
+    ['Ataque Extra','Pode atacar duas vezes com a ação de Atacar.'],
+    ['Errante (6º nível)','+3m de deslocamento (já somado) e deslocamentos de escalada e natação iguais ao deslocamento normal.'],
+    ['Talento: Mestre-Atirador','+1 em Destreza (já contado). Atirar além do alcance normal e à queima-roupa não causam desvantagem. Ignora cobertura de metade e de três quartos.'],
+    ['Talento: Iniciado em Magia (Guia)','Ganha dois truques e uma magia de 1º círculo da lista de druida (Criar Chamas, Orientação, Palavra Curativa). A magia de 1º círculo pode ser conjurada 1x por dia sem gastar espaço.']
+  ],
+  raceTraits:[
+    ['Visão no Escuro','18m.'],
+    ['Truque Aprendido','Arte Druídica.'],
+    ['Magias Aprendidas (racial)','Passos Largos e Passos sem Rastro.'],
+    ['Vantagem','Pra evitar ficar Enfeitiçado.'],
+    ['Descanso Longo','Meditação de 4h; não precisa dormir por causa de magias.'],
+    ['Proficiência','Percepção.']
+  ],
+  actions:[
+    ['Arco Curto', 9, '1d6+7 perfurante. Maestria: ao acertar, vantagem no próximo ataque contra o mesmo alvo antes do fim do seu próximo turno.'],
+    ['Espada curta', 7, '1d6+4 cortante. Maestria: ao acertar, vantagem no próximo ataque contra o mesmo alvo antes do fim do seu próximo turno.']
+  ],
+  bonus:['Marca do Predador','Saraivada de Espinhos','Palavra Curativa','Golpe de Zephyr'],
+  resources:[{key:'marca', label:'Marca do Predador', max:3, reset:'long'}, {key:'golpe', label:'Golpe Terrível', max:2, reset:'long'}, {key:'lvl1', label:'1º Círculo', max:4, reset:'long'}, {key:'lvl2', label:'2º Círculo', max:2, reset:'long'}],
+  spells:[
+    {group:'Magias sempre aprendidas', items:[
+      ['Marca do Predador','ação bônus · conc. 1h','Marca uma criatura visível como presa: todo ataque seu que acertar ela causa +1d6 de dano Energético extra. Vantagem em Percepção ou Sobrevivência pra rastreá-la. Se o alvo morrer antes do fim da magia, pode transferir a marca pra outro alvo com uma ação bônus.'],
+      ['Palavra Curativa','ação bônus','Cura 1d4 + Sabedoria numa criatura visível a até 18m. 1x por dia sem gastar espaço (Iniciado em Magia).'],
+      ['Passos Largos','ação · conc.','+10 pés (3m) de deslocamento no alvo tocado.'],
+      ['Passos sem Rastro','ação · conc. 1h','Cada criatura à sua escolha a até 9m (incluindo você) ganha +10 em testes de Destreza (Furtividade) e não pode ser rastreada por meios não-mágicos.'],
+      ['Disfarçar-se','ação · conc.','Cria uma ilusão que muda sua aparência e a de seu equipamento. Pode ser descoberta com teste de Investigação contra sua CD.'],
+      ['Corda Extradimensional','ação · conc. 1h','Toca uma corda de até 18m; uma ponta se ergue no ar, revelando uma entrada invisível pra um espaço extradimensional que suporta 8 criaturas médias ou menores. A corda pode ser puxada pra dentro, fazendo-a desaparecer — nada entra ou sai por magia, e quem está dentro vê o lado de fora por uma janela de 0,9x1,5m.']
+    ]},
+    {group:'Magias aprendidas', items:[
+      ['Golpe de Zephyr','ação bônus · conc. 1min','Enquanto durar, seu movimento não provoca ataques de oportunidade. Uma vez até o fim da magia, pode se dar vantagem numa rolagem de ataque com arma no seu turno — esse ataque causa +1d8 de dano de energia se acertar. Seu deslocamento aumenta em 9m até o fim daquele turno.'],
+      ['Absorver Elementos','reação · quando sofre dano de ácido/frio/elétrico/fogo/trovejante','Reduz pela metade o dano daquele ataque. Até o fim do seu próximo turno, seu próximo acerto corpo a corpo causa +1d6 de dano extra do mesmo tipo.'],
+      ['Saraivada de Espinhos','ação bônus · imediatamente após acertar um ataque à distância','O alvo e cada criatura a até 1,5m fazem TR de Destreza, sofrendo 1d10 perfurante se falharem ou metade no sucesso.'],
+      ['Névoa Obscurecente','ação · alcance 36m · conc.','Cria uma esfera de 6m de raio em escuridão densa. Vento moderado dissipa a névoa.'],
+      ['Falar com Animais','ação (ritual)','Permite comunicação com bestas por 10 minutos; elas entendem você e podem compartilhar informações da região.'],
+      ['Curar Ferimentos','ação · toque','Cura 1d8 + Sabedoria.']
+    ]},
+    {group:'Truques', items:[
+      ['Arte Druídica','ação','Cria efeitos sensoriais menores (faíscas, símbolos, cheiros) — utilidade, não combate.'],
+      ['Orientação','ação · toque · conc.','O alvo tocado soma 1d4 a um teste de habilidade antes do fim da magia.'],
+      ['Criar Chamas','ação','Chama na mão; pode iluminar como tocha ou ser arremessada como ataque à distância.']
+    ]}
+  ],
+  tactic:'Abre o combate usando Marca do Predador (ação bônus, não consome a ação principal) no alvo mais perigoso. Com Ataque Extra, dispara duas vezes por turno — a primeira vez que acertar com o Arco Curto, usa Saraivada de Espinhos como ação bônus pra dano extra em área. Golpe Terrível (2d6 psíquico) é o burst principal: só 2 usos por descanso longo, guarde pra quando o alvo valer a pena. Mestre-Atirador permite atirar de perto ou de longe sem penalidade, e ignorar cobertura parcial — não precisa se preocupar tanto com posicionamento preciso. Golpe de Zephyr ajuda a reposicionar sem sofrer ataque de oportunidade.'
+},
+{
+  id:'matthyas', accent:'var(--c-matthyas)', name:'Matthyas Bisnerk', subtitle:'Ladino (Assassino) 6 · Humano',
+  ac:15, hp:45, speed:'12m (Velocista)', initValue:7, initFormula:'Destreza, proficiência por Alerta',
+  abilities:[['FOR',10,'+0'],['DES',18,'+4'],['CON',15,'+2'],['INT',8,'-1'],['SAB',13,'+1'],['CAR',12,'+1']],
+  saves:'Destreza +7, Inteligência +2',
+  classe:'Ladino Assassino',
+  classTraits:[
+    ['Ataque Furtivo','+3d6 de dano uma vez por turno, ao atacar com vantagem (ou com aliado engajado no alvo) usando arma de acuidade ou à distância, desde que não tenha desvantagem no ataque.'],
+    ['Especialista (Expertise)','Proficiência dobrada em Furtividade e Prestidigitação.'],
+    ['Maestria em Arma','Maestria em dois tipos de armas: Rapieira e Besta de Mão.'],
+    ['Ação Ardilosa','Ação bônus para Correr, Desengajar ou Esconder-se.'],
+    ['Mira Firme','Ação bônus: vantagem na próxima jogada de ataque no turno atual — só se não tiver se movido neste turno. Após usar, Deslocamento vira 0 até o fim do turno.'],
+    ['Golpe Astuto','Gasta d6 do Ataque Furtivo (CD 15) pra efeito extra: Envenenar (-1d6, TR Constituição ou Envenenado 1min, repete no fim de cada turno do alvo) · Retirada (-1d6, move metade do Deslocamento sem provocar Ataque de Oportunidade) · Tropeço (-1d6, alvo Grande ou menor faz TR Destreza ou fica Caído).'],
+    ['Esquiva Sobrenatural','Reação, quando um atacante que ele consegue ver acerta um golpe nele: reduz o dano daquele ataque pela metade.'],
+    ['Assassinar','Vantagem em jogadas de Iniciativa. Golpe Surpreendente: vantagem em ataques contra criatura que ainda não agiu no combate; contra alvo surpreso, dano adicional igual ao nível de Ladino (+5).'],
+    ['Talento: Velocista','+1 Destreza (já contado). Deslocamento +3m (já contado). Correr em terreno difícil não custa deslocamento extra. Ataques de Oportunidade contra ele têm desvantagem.'],
+    ['Mão Gélida (item narrativo)','Sua mão esquerda foi substituída por uma mão de gelo. Toda arma empunhada nessa mão ganha +1 no dano.']
+  ],
+  raceTraits:[
+    ['Deslocamento','9m (base, antes do bônus de Velocista).'],
+    ['Eficiente','Ganha Inspiração Heroica sempre que completa um Descanso Longo.'],
+    ['Hábil','Proficiência extra numa perícia à escolha: Furtividade e Prestidigitação.'],
+    ['Versátil','Ganha um Talento de Origem à escolha: Sortudo.'],
+    ['Talento de Origem (Antecedente): Alerta','Proficiência em Iniciativa. Pode trocar sua Iniciativa com a de um aliado voluntário no mesmo combate.'],
+    ['Sortudo','Pontos de Sorte = bônus de proficiência, restaurados em Descanso Longo. Gasta 1 ponto pra ter vantagem numa jogada de d20 sua, ou pra impor desvantagem na jogada de ataque de uma criatura contra ele.']
+  ],
+  actions:[
+    ['Rapieira', 7, '1d8+5 perfurante (+3d6 se furtivo se aplicar). Maestria: ao acertar, vantagem no próximo ataque contra o mesmo alvo antes do fim do seu próximo turno.'],
+    ['Espada curta', 7, '1d6+5 cortante (+3d6 se furtivo se aplicar). Maestria: ao acertar, vantagem no próximo ataque contra o mesmo alvo antes do fim do seu próximo turno.'],
+    ['Besta de mão', 7, '1d6+5 perfurante (+3d6 se furtivo se aplicar), alcance 9m/36m (desvantagem além de 9m). Maestria: ao acertar, vantagem no próximo ataque contra o mesmo alvo antes do fim do seu próximo turno.'],
+    ['Adaga', 7, '1d4+5 perfurante (+3d6 se furtivo se aplicar). Maestria: pode ser feito como parte da própria ação de Atacar, sem custar ação bônus, uma vez por turno.']
+  ],
+  bonus:['Ação Ardilosa (Correr / Desengajar / Esconder-se)', 'Mira Firme (vantagem no próximo ataque, só se não se moveu)'],
+  resources:[{key:'sortudo', label:'Sortudo', max:3, reset:'long'}, {key:'inspiracao', label:'Inspiração Heroica', max:1, reset:'long'}, {key:'sneak', label:'Ataque Furtivo', max:1, reset:'turn'}],
+  tactic:'Abre o combate puxando o máximo de dano possível: se esconde antes da luta e ataca surpreendendo o alvo — Golpe Surpreendente (vantagem + dano extra igual ao nível) junto com o furtivo pode resolver um inimigo sozinho no primeiro golpe. Em turnos parado (sem se mover), usa Mira Firme pra garantir vantagem no ataque. Golpe Astuto entra quando vale a pena trocar dano bruto por controle (Envenenar/Tropeço) ou reposicionamento seguro (Retirada). Daí em diante, segue o mesmo padrão da Surina: se estiver perto do alvo ou com um aliado adjacente a ele, usa isso pra manter o furtivo ativo; senão, prioriza se esconder de novo antes de atacar. Evita ficar parado perto do inimigo — ataca e desengaja (Ação Ardilosa) sempre que possível.'
+},
+{
+  id:'surina', accent:'var(--c-surina)', name:'Surina Narghat', subtitle:'Ladina (Assaltante) 6 · Draconato Vermelho',
+  ac:13, hp:33, speed:'12m (Mobile)', initValue:2, initFormula:'Destreza',
+  abilities:[['FOR',9,'-1'],['DES',15,'+2'],['CON',10,'+0'],['INT',11,'+0'],['SAB',14,'+2'],['CAR',14,'+2']],
+  saves:'Destreza +5, Inteligência +3',
+  classe:'Ladina Assaltante',
+  classTraits:[
+    ['Ataque Furtivo','+3d6 de dano uma vez por turno, com vantagem ou aliado adjacente ao alvo.'],
+    ['Esquiva Sobrenatural','Reação, quando um atacante que ela consegue ver acerta um golpe nela: reduz o dano daquele ataque pela metade.'],
+    ['Perícia (Expertise)','Duas perícias com o dobro do bônus de proficiência — confirme quais.'],
+    ['Ação Ardilosa','Ação bônus para Disparada, Desengajar ou Esconder-se.'],
+    ['Mãos Rápidas (Ladina de Roubos)','Pode usar a Ação Ardilosa pra Usar um Objeto, ou fazer um teste de Prestidigitação (destravar, soltar algemas, roubar um item) como ação bônus.'],
+    ['Trabalho de Segundo Andar','Escalar não custa movimento extra. Salto com corrida aumenta 0,3m por ponto do seu modificador de Destreza — com Destreza +2, isso dá +0,6m no alcance do salto.'],
+    ['Mobile (talento)','Deslocamento +3m (já contado). Ignora terreno difícil ao usar Disparada. Não sofre ataque de oportunidade de qualquer criatura que ela tenha atacado neste turno, mesmo saindo do alcance dela.']
+  ],
+  raceTraits:[
+    ['Ancestralidade Dracônica (Vermelho)','Resistência a dano de fogo. (O sopro de fogo em si está listado nas Ações, já que é usável em combate.)']
+  ],
+  actions:[
+    ['Rapieira', 5, '1d8+2 perfurante (+3d6 se furtivo se aplicar).'],
+    ['Espada curta', 5, '1d6+2 perfurante.'],
+    ['Adaga', 5, '1d4+2 perfurante, arremessável 6m/18m.'],
+    ['Sopro de Fogo (recarga)', null, 'CD 11 Destreza, 2d6 fogo em cone de 4,5m — ótimo contra grupos, guarde pra quando valer a pena.']
+  ],
+  bonus:['Ação Ardilosa / Mãos Rápidas'],
+  resources:[{key:'sneak', label:'Ataque Furtivo disponível (este turno)', max:1, reset:'turn'},{key:'breath', label:'Sopro de Fogo', max:1, reset:'short'}],
+  tactic:'Chega perto, bate, desengaja — hit-and-run. Com CA e PV mais baixos do grupo, evite deixá-la trocando golpe direto com um inimigo forte. O sopro de fogo é ótimo como abertura contra 2+ inimigos agrupados, mas só recarrega num descanso, então use com critério.'
+},
+{
+  id:'aethelflaed', accent:'var(--c-aethelflaed)', name:'Æthelflæd Blackwood', subtitle:'Druida (Círculo da Lua) 6 · Meio-elfa',
+  ac:14, hp:45, speed:'9m', initValue:1, initFormula:'Destreza',
+  abilities:[['FOR',10,'+0'],['DES',13,'+1'],['CON',15,'+2'],['INT',12,'+1'],['SAB',18,'+4'],['CAR',10,'+0']],
+  saves:'Inteligência +4, Sabedoria +7',
+  classe:'Druida Círculo da Lua',
+  classTraits:[
+    ['Conjuração','Pode preparar até 9 magias por vez (nível + Sabedoria). O repertório dela tem 17 magias entre 1º, 2º e 3º círculo — escolha 9 pra ter preparadas a cada descanso longo. 4 espaços de 1º círculo, 3 de 2º, 3 de 3º. CD 15, ataque de magia +7.'],
+    ['Ataque Primordial','Seus ataques na forma de besta contam como mágicos para ultrapassar resistência e imunidade a ataques e danos não-mágicos.'],
+    ['Forma Selvagem de Combate','Transforma como ação bônus (em vez de ação). Enquanto transformada, pode gastar um espaço de magia como ação bônus pra curar 1d8 PV por círculo do espaço.'],
+    ['Formas Circulares','A partir do 2º nível, pode virar besta de ND até 1 (não só 1/4), sem voar nem nadar ainda. No 6º nível o limite de ND sobe (nível ÷ 3), nadar libera no 4º nível e voar só no 8º.']
+  ],
+  raceTraits:[
+    ['Visão no Escuro','18m.'],
+    ['Ancestral Feérico','Vantagem em testes de resistência contra ficar encantado. Imune a ser posto pra dormir por magia.'],
+    ['Versatilidade de Perícia','Proficiência em duas perícias à escolha — confirme quais.']
+  ],
+  actions:[
+    ['Cimitarra', 4, '1d6+1 cortante.'],
+    ['Arco longo', 4, '1d8+1 perfurante, alcance 45/180m.']
+  ],
+  bonus:['Transformar-se em Forma Selvagem (ação bônus)'],
+  resources:[{key:'lvl1', label:'1º Círculo', max:4, reset:'long'},{key:'lvl2', label:'2º Círculo', max:3, reset:'long'},{key:'lvl3', label:'3º Círculo', max:3, reset:'long'},{key:'wildshape', label:'Forma Selvagem', max:2, reset:'short'}],
+  wildShapes:[
+    {"name": "Lobo Atroz", "nd": "1", "env": "Fera Grande", "ac": 14, "hp": 22, "hpDice": "3d10+6", "speed": "15m", "str": ["17", "+3"], "dex": ["15", "+2"], "con": ["15", "+2"], "actions": [{"name": "Mordida", "bonus": 5, "dmg": "8 (1d10+3) perfurante. Se o alvo for Grande ou menor, fica caído."}], "traits": [{"name": "Táticas de Grupo", "desc": "Vantagem em uma jogada de ataque contra uma criatura se ao menos um aliado do lobo, sem estar incapacitado, estiver a até 1,5m dela."}, {"name": "Perícias e sentidos", "desc": "Furtividade +4, Percepção +5. Percepção passiva 15, visão no escuro 18m."}]},
+    {"name": "Urso Pardo", "nd": "1", "env": "Fera Grande", "ac": 11, "hp": 22, "hpDice": "3d10+6", "speed": "12m, escalada 9m", "str": ["17", "+3"], "dex": ["12", "+1"], "con": ["15", "+2"], "actions": [{"name": "Ataques Múltiplos", "bonus":null, "dmg": "Um ataque de Mordida e um de Garra."}, {"name": "Mordida", "bonus": 5, "dmg": "7 (1d8+3) perfurante."}, {"name": "Garra", "bonus": 5, "dmg": "5 (1d4+3) cortante. Se o alvo for Grande ou menor, fica caído."}], "traits": [{"name": "Perícias e sentidos", "desc": "Percepção +3. Percepção passiva 13, visão no escuro 18m."}]},
+    {"name": "Aranha Gigante", "nd": "1", "env": "Fera Grande", "ac": 14, "hp": 26, "hpDice": "4d10+4", "speed": "9m, escalada 9m", "str": ["14", "+2"], "dex": ["16", "+3"], "con": ["12", "+1"], "actions": [{"name": "Mordida", "bonus": 5, "dmg": "7 (1d8+3) perfurante mais 7 (2d6) de dano venenoso."}, {"name": "Teia (recarga 5–6)", "bonus":null, "dmg": "TR de Destreza CD 13, uma criatura que ela veja a até 18m. Falha: o alvo fica contido até a teia ser destruída (CA 10; PV 5; vulnerabilidade a dano ígneo; imunidade a dano psíquico e venenoso)."}], "traits": [{"name": "Escalada de Aranha", "desc": "Escala superfícies difíceis, inclusive tetos, sem teste de atributo."}, {"name": "Andar na Teia", "desc": "Ignora restrições de movimento causadas por teias e sabe a localização de qualquer criatura em contato com a mesma teia."}, {"name": "Perícias e sentidos", "desc": "Furtividade +7, Percepção +4. Percepção passiva 14, visão no escuro 18m."}]},
+    {"name": "Cavalo de Guerra", "nd": "1/2", "env": "Fera Grande", "ac": 11, "hp": 19, "hpDice": "3d10+3", "speed": "18m", "str": ["18", "+4"], "dex": ["12", "+1"], "con": ["13", "+1"], "actions": [{"name": "Cascos", "bonus": 6, "dmg": "9 (2d4+4) contundente. Se o alvo for Grande ou menor e o cavalo tiver se movido ao menos 6m em linha reta em direção a ele imediatamente antes do acerto, o alvo sofre 5 (2d4) de dano contundente adicional e fica caído."}], "traits": [{"name": "Sentidos", "desc": "Percepção passiva 11."}]},
+    {"name": "Cobra Constritora Gigante", "nd": "2", "env": "Fera Enorme", "ac": 12, "hp": 60, "hpDice": "8d12+8", "speed": "9m, natação 9m", "str": ["19", "+4"], "dex": ["14", "+2"], "con": ["12", "+1"], "actions": [{"name": "Ataques Múltiplos", "bonus":null, "dmg": "Um ataque de Mordida e usa Constrição."}, {"name": "Mordida", "bonus": 6, "dmg": "11 (2d6+4) perfurante, alcance 3m."}, {"name": "Constrição", "bonus":null, "dmg": "TR de Força CD 14, uma criatura Grande ou menor que a cobra veja a até 3m. Falha: 13 (2d8+4) contundente e o alvo fica agarrado (CD para escapar 14)."}], "traits": [{"name": "Perícias e sentidos", "desc": "Percepção +2. Percepção passiva 12, visão às cegas 3m."}]},
+    {"name": "Javali Gigante", "nd": "2", "env": "Fera Grande", "ac": 13, "hp": 42, "hpDice": "5d10+15", "speed": "12m", "str": ["17", "+3"], "dex": ["10", "+0"], "con": ["16", "+3"], "actions": [{"name": "Trespassar", "bonus": 5, "dmg": "10 (2d6+3) perfurante. Se o alvo for Grande ou menor e o javali tiver se movido ao menos 6m em linha reta em direção a ele imediatamente antes do acerto, o alvo sofre 7 (2d6) de dano perfurante adicional e fica caído."}], "traits": [{"name": "Fúria Sangrenta", "desc": "Vantagem em jogadas de ataque corpo a corpo enquanto estiver ensanguentado."}, {"name": "Sentidos", "desc": "Percepção passiva 8."}]},
+    {"name": "Tigre-dentes-de-sabre", "nd": "2", "env": "Fera Grande", "ac": 13, "hp": 52, "hpDice": "7d10+14", "speed": "12m", "str": ["18", "+4"], "dex": ["17", "+3"], "con": ["15", "+2"], "actions": [{"name": "Ataques Múltiplos", "bonus":null, "dmg": "Dois ataques de Rasgar."}, {"name": "Rasgar", "bonus": 6, "dmg": "11 (2d6+4) cortante."}, {"name": "Fuga Ligeira (ação bônus)", "bonus":null, "dmg": "Executa a ação Desengajar ou Esconder-se."}], "traits": [{"name": "Salto Correndo", "desc": "Com uma corrida inicial de 3m, pode saltar até 7,5m em distância."}, {"name": "Perícias e sentidos", "desc": "Furtividade +7, Percepção +5. Percepção passiva 15, visão no escuro 18m."}]},
+    {"name": "Tubarão Caçador", "nd": "2", "env": "Fera Grande", "ac": 12, "hp": 45, "hpDice": "6d10+12", "speed": "1,5m, natação 12m", "str": ["18", "+4"], "dex": ["14", "+2"], "con": ["15", "+2"], "actions": [{"name": "Mordida", "bonus": 6, "dmg": "14 (3d6+4) perfurante. Vantagem no ataque se o alvo não tiver todos os PV."}], "traits": [{"name": "Respirar na Água", "desc": "Só respira sob a água."}, {"name": "Perícias e sentidos", "desc": "Percepção +2. Percepção passiva 12, visão às cegas 18m."}]}
+  ],
+  spells:[
+    {group:'Truques', items:[
+      ['Bordão Místico','ação bônus · toque · 1min','Imbui um bordão/clava que esteja segurando: ataques corpo a corpo com ele usam a habilidade de conjuração (não Força) e o dado de dano vira d8. A arma se torna mágica.'],
+      ['Druidismo','ação · alcance 9m','Efeito menor da natureza à escolha: prevê o clima, floresce/brota algo, cria som/cheiro sutil, ou acende/apaga fogo pequeno. Utilidade, não combate.'],
+      ['Orientação','ação · toque · conc. 1min','Toca uma criatura voluntária. Antes da magia acabar, o alvo pode rolar 1d4 e somar a um teste de habilidade (perícia ou atributo) à escolha dele — não vale pra ataque nem TR.']
+    ]},
+    {group:'Magias preparadas (1º círculo)', items:[
+      ['Amizade Animal','ação · 24h, sem conc.','Convence uma besta pequena/média de que você não é ameaça; TR de Sabedoria ou fica encantada por 24h (quebra se você ou aliado a atacar).'],
+      ['Constrição','ação · alcance 27m · conc. 1min','Vinhas brotam num quadrado de 6m, virando terreno difícil. TR de Força ou fica impedido; solta-se com teste de Força CD 14.'],
+      ['Fogo das Fadas','ação · alcance 18m · conc. 1min','Cubo de 6m: cada criatura na área faz TR de Destreza ou fica contornada em luz colorida, emanando penumbra em 3m. Qualquer ataque contra alvo contornado tem vantagem se o atacante puder vê-lo, e o alvo não se beneficia de invisibilidade.'],
+      ['Onda Trovejante','ação · cubo 4,5m','TR de Constituição, 2d8 trovejante (metade no sucesso), empurra 3m quem falhar.']
+    ]},
+    {group:'Magias preparadas (2º círculo)', items:[
+      ['Crescer Espinhos','ação · alcance 45m · conc. 10min','Área de 6m de raio vira terreno difícil coberto de espinhos camuflados (Percepção CD da magia pra notar antes de entrar). Quem entra ou se move na área sofre 2d4 perfurante a cada 1,5m percorrido.'],
+      ['Esfera Flamejante','ação · alcance 18m · conc. 1min','Esfera de fogo de 1,5m; quem terminar o turno a até 1,5m dela faz TR de Destreza, sofrendo 2d6 de fogo (metade no sucesso). Ação bônus move a esfera até 9m; se colidir com uma criatura, ela também faz o teste e a esfera para de se mover naquele turno.'],
+      ['Esquentar Metal','ação · alcance 18m · conc. 1min','Escolhe um objeto de metal manufaturado visível; ele fica incandescente e causa 2d8 de fogo em quem o toca fisicamente. Ação bônus nos turnos seguintes repete o dano. Quem estiver segurando/vestindo faz TR de Constituição ou larga o item; se não largar, fica em desvantagem em ataques e testes de atributo até o início do próximo turno dele.'],
+      ['Imobilizar Pessoas','ação · alcance 18m · conc. 1min','Um humanoide faz TR de Sabedoria ou fica paralisado; repete o teste no fim de cada turno dele.'],
+      ['Passos sem Pegadas','ação · conc. 1h','Cada criatura à sua escolha a até 9m (incluindo você) ganha +10 em testes de Destreza (Furtividade) e não pode ser rastreada por meios não-mágicos.'],
+      ['Pele de Árvore','ação · toque · conc. 1h','A CA do alvo tocado não pode ser inferior a 16, independente da armadura que estiver usando.'],
+      ['Raio Lunar','ação · alcance 36m · conc. 1min','Coluna de luz de 1,5m de raio; quem está ou entra na área faz TR de Constituição, sofrendo 2d10 radiante (metade no sucesso). Dano dobra contra metamorfos que falharem. Move 9m como ação bônus.'],
+      ['Restauração Menor','ação · toque','Remove uma condição (cego, surdo, paralisado, envenenado etc.) ou uma doença.'],
+      ['Sentido Bestial','ação · toque · conc. 1h (ritual)','Toca uma besta voluntária. Pode usar a ação pra ver e ouvir pelos sentidos dela (inclusive sentidos especiais que ela tenha), ficando cega e surda aos próprios sentidos enquanto isso.']
+    ]},
+    {group:'Magias preparadas (3º círculo)', items:[
+      ['Convocar Relâmpagos','ação · conc. 10min','Cria uma nuvem de tempestade (cilindro de 3m de altura, 18m de raio) num ponto visível acima de você. Ao conjurar, e em cada turno seguinte usando a ação, chama um raio num ponto sob a nuvem: cada criatura a até 1,5m do ponto faz TR de Destreza, sofrendo 3d10 de elétrico (4d10 se estiver ao ar livre numa tempestade já em curso), metade no sucesso.'],
+      ['Conjurar Animais','ação · alcance 18m · conc. 1h','Invoca espíritos feéricos em forma de besta pra lutar ao seu lado: escolha 1 besta de ND 2, 2 de ND 1, 4 de ND 1/2, ou 8 de ND 1/4 (o mestre fornece as estatísticas). Elas agem como aliadas, obedecem seus comandos e rolam iniciativa própria.'],
+      ['Dissipar Magia','ação · alcance 36m','Encerra uma magia ativa de nível 3 ou menor num alvo. Contra magia de nível 4+, faz um teste de habilidade de conjuração (CD 10 + nível da magia) pra ver se dissipa.'],
+      ['Muralha de Vento','ação · alcance 36m · conc. 1min','Cria uma muralha de vento forte (até 15m de comprimento, 4,5m de altura, 0,3m de grossura) num formato contínuo à escolha. Bloqueia fumaça, neblina, gases e projéteis pequenos ou menores; criaturas voadoras pequenas ou menores não conseguem atravessar. Criaturas Grandes ou menores que tentem atravessar fazem TR de Força ou são jogadas de volta.']
+    ]}
+  ],
+  tactic:'Com Bordão Místico ativo, luta corpo a corpo usando Sabedoria; Convocar Relâmpagos é ótima contra grupos espalhados (dano repetido a cada turno, sem gastar espaço de novo); Muralha de Vento pode bloquear arqueiros e voadores pequenos, ou cobrir uma retirada; Dissipar Magia resolve um efeito mágico perigoso num aliado ou inimigo; Emaranhar/Onda Trovejante também são boas contra grupos. Conjurar Animais soma corpos extras na linha de frente antes de um combate difícil. Quando o combate pedir uma linha de frente extra, escolhe a forma selvagem mais adequada à situação: Lobo Terrível ou Hiena pra dano/controle, Urso Marrom pro maior dano bruto, Aranha Gigante pra imobilizar à distância, Macaco pra escalar e alternar corpo a corpo/distância, Cavalo de Guerra pra mobilidade extrema.'
+},
+{
+  id:'nephile', accent:'var(--c-nephile)', name:'Nephile Corven', subtitle:'Clériga (Domínio da Vida) 6 · Meio-elfa',
+  ac:15, hp:39, speed:'9m', initValue:2, initFormula:'Destreza',
+  abilities:[['FOR',9,'-1'],['DES',14,'+2'],['CON',12,'+1'],['INT',11,'+0'],['SAB',16,'+3'],['CAR',15,'+2']],
+  saves:'Sabedoria +6, Carisma +5',
+  classe:'Clériga Domínio da Vida',
+  classTraits:[
+    ['Conjuração','<br>• <span class="hl">CD das magias</span> = 14<br>• <span class="hl">Modificador de ataque mágico</span> = +6<br>• 9 magias preparadas e 4 truques<br>• É possível <span class="hl">conjurar qualquer magia como um ritual</span>, ou seja <span class="hl">sem gastar espaços de magia</span> (mas elas passam a <span class="hl">demorar 10 minutos</span> para serem conjuradas)<br>• A lista de magias preparadas pode ser <span class="hl">redefinida a cada descanso longo</span><br>• Você possui 6 magias sempre aprendidas do seu domínio'],
+    ['Discípula da Vida','Magias de cura que restauram PV curam uma quantidade extra igual a 2 + o nível da magia (do espaço usado). Ex: magia de 1º círculo cura +3 a mais; de 2º círculo, +4 a mais.'],
+    ['Curandeira Abençoada','As magias que conjura para curar os outros também curam ela. Ao conjurar uma magia de cura em outra criatura, recupera PV em um total de 2 + nível da magia.'],
+    ['Canalizar Divindade: Preservar Vida','Uma vez por descanso: distribui um total de 30 PV (5x nível de clériga) entre criaturas a 9m, até metade do PV máximo de cada uma. Não precisa de teste de ataque.'],
+    ['Canalizar Divindade: Destruir Mortos-Vivos','A partir do 5º nível, ao usar a versão de Expulsar Mortos-Vivos: mortos-vivos de ND 1/2 ou menos que falharem no TR de Sabedoria são destruídos automaticamente, em vez de só ficarem amedrontados.']
+  ],
+  raceTraits:[
+    ['Visão no Escuro','18m.'],
+    ['Ancestral Feérico','Vantagem em testes de resistência contra ficar encantado. Imune a ser posto pra dormir por magia.'],
+    ['Versatilidade de Perícia','Proficiência em duas perícias à escolha — confirme quais.']
+  ],
+  actions:[
+    ['Martelo de guerra', -1, '1d8-1 contundente. Clériga não tem proficiência com armas marciais (só simples), então o ataque não soma o bônus de proficiência — só o modificador de Força.'],
+    ['Besta leve', 5, '1d8+1 perfurante, alcance 24m/96m. Tem a propriedade Duas Mãos — precisa das duas mãos livres pra atirar, então não dá pra usar junto com o escudo.']
+  ],
+  bonus:['Arma Espiritual','Escudo da Fé'],
+  resources:[{key:'lvl1', label:'1º Círculo', max:4, reset:'long'},{key:'lvl2', label:'2º Círculo', max:3, reset:'long'},{key:'lvl3', label:'3º Círculo', max:3, reset:'long'},{key:'channel', label:'Canalizar Divindade', max:2, reset:'short'}],
+  spells:[
+    {group:'Truques', items:[
+      ['Chama Sagrada','ação · alcance 18m','Ataque de magia à distância; alvo faz TR de Destreza; 1d8 radiante. A cobertura normal não ajuda o alvo a evitar essa magia.'],
+      ['Poupar o Moribundo','ação · toque','Estabiliza uma criatura a 0 PV sem gastar uma cura de verdade.'],
+      ['Taumaturgia','ação · alcance 9m','Efeito menor de manifestação divina (voz alta, portas abrindo/fechando, luzes tremulando); utilidade, não combate.'],
+      ['Orientação','ação · toque · conc. 1min','Toca uma criatura voluntária. Antes da magia acabar, o alvo pode rolar 1d4 e somar a um teste de habilidade (perícia ou atributo) à escolha dele — não vale pra ataque nem TR.']
+    ]},
+    {group:'Magias de domínio (sempre preparadas)', items:[
+      ['Bênção','ação · conc. 1min','Até 3 criaturas somam 1d4 em ataques e testes de resistência.'],
+      ['Curar Ferimentos','ação · toque','Cura 1d8 + Sabedoria, mais 3 a mais pela Discípula da Vida (2 + nível da magia, aqui 1º círculo).'],
+      ['Arma Espiritual','ação bônus · conc. até recast','Cria uma arma espectral que ataca (1d8 + Sabedoria força). Pode mover e repetir o ataque em ação bônus nos turnos seguintes.'],
+      ['Restauração Menor','ação · toque','Remove uma condição (cego, surdo, paralisado, envenenado etc.) ou uma doença.'],
+      ['Sinal de Esperança','ação · alcance 9m · conc. 1min','Até criaturas à sua escolha na área ganham vantagem em testes de resistência de Sabedoria e testes de morte, e recuperam o máximo possível de PV em qualquer cura que receberem enquanto a magia durar.'],
+      ['Revivificar','ação · toque','Toca uma criatura morta há no máximo 1 minuto; ela volta à vida com 1 PV (não restaura partes do corpo faltando). Consome componente material caro (300po em diamantes).']
+    ]},
+    {group:'Magias preparadas (escolhidas)', items:[
+      ['Infligir Ferimentos','ação · corpo a corpo com magia','3d10 dano necrótico. Maior dano direto dela, mas precisa chegar perto.'],
+      ['Escudo da Fé','ação bônus · conc. 10min','+2 de CA numa criatura.'],
+      ['Perdição','ação · conc. 1min','Até 3 inimigos sofrem -1d4 em ataques e testes de resistência (TR de Carisma).'],
+      ['Raio Guiador','ação · alcance 36m','Ataque à distância com magia; 4d6 radiante, e dá vantagem no próximo ataque de qualquer aliado contra o alvo.'],
+      ['Comando','ação · alcance 18m','Uma criatura visível faz TR de Sabedoria ou obedece uma palavra única no próprio turno seguinte (ex: Caia, Fuja, Largue, Aproxime-se, Pare). Sem efeito em mortos-vivos ou quem não entende seu idioma; magia não pode ser diretamente nociva.'],
+      ['Imobilizar Pessoas','ação · alcance 18m · conc. 1min','Um humanoide faz TR de Sabedoria ou fica paralisado; repete o teste no fim de cada turno dele.'],
+      ['Ajuda','ação','Até 3 criaturas ganham +5 PV máximos (e atuais) por 8 horas — usar antes de um combate difícil, não durante.'],
+      ['Oração Curativa','10 minutos','Até 6 criaturas à sua escolha, dentro de 9m, recuperam 2d8 + Sabedoria de PV cada uma (mais 3 a mais por cura, pela Discípula da Vida). Tempo de conjuração longo — só fora de combate, entre uma luta e outra.'],
+      ['Falar com os Mortos','ação · 10min de duração','Reanima o espírito de um cadáver pra responder até 5 perguntas suas. Ele só sabe o que sabia em vida, respostas costumam ser curtas ou enigmáticas, e ele não é obrigado a responder com sinceridade se te reconhecer como hostil.'],
+      ['Animar Mortos','1 minuto (fora de combate)','Transforma uma pilha de ossos num esqueleto ou um cadáver num zumbi sob seu comando por 24h (o mestre fornece as estatísticas). Comanda mentalmente como ação bônus a até 18m. Tempo de conjuração longo — não dá pra usar no meio de uma luta, só entre combates. Vale conferir com o grupo e o mestre antes de usar, já que a maioria das mesas trata isso como um ato de temática sombria.'],
+      ['Espíritos Guardiões','ação · conc. 10min','Cria uma emanação de 4,5m ao seu redor. Deslocamento de inimigos na área cai pela metade. Sempre que uma criatura entra na área ou começa o turno lá, faz TR de Sabedoria (uma vez por turno): se falhar, sofre 3d8 radiante (ou necrótico, dependendo do seu alinhamento), metade no sucesso.'],
+      ['Zona da Verdade','ação · alcance 18m · 10min','Esfera de 4,5m de raio num ponto à sua escolha. Quem entra na área pela primeira vez num turno ou começa o turno nela faz TR de Carisma; se falhar, não consegue mentir deliberadamente dentro da área. Você sabe quem passou ou falhou. A criatura afetada sabe da magia e pode se esquivar de responder, desde que se mantenha dentro da verdade.']
+    ]}
+  ],
+  tactic:'Fica atrás da linha de frente, ou entra no meio do combate se conjurar Espíritos Guardiões (ação normal) — a emanação de 4,5m causa dano contínuo em quem passar perto ou começar o turno ali, então vale a pena ela se aproximar depois de conjurar. Guarda o Preservar Vida (25 PV pra distribuir) pra depois de uma rodada ruim, não gasta cedo com dano pequeno. Prefere Raio Guiador ou Infligir Ferimentos como dano — besta leve e martelo de guerra têm limitações (a besta não pode ser usada junto com o escudo, e o martelo não tem proficiência). Revivificar é a rede de segurança se alguém cair — vale lembrar que precisa dos diamantes.'
+},
+{
+  id:'thireon', accent:'var(--c-thireon)', name:'Tiryon', subtitle:'Guerreiro (Mestre de Batalha) 6 · Anão da Montanha',
+  ac:18, hp:62, speed:'7,5m', initValue:-1, initFormula:'Destreza',
+  abilities:[['FOR',20,'+5'],['DES',8,'-1'],['CON',16,'+3'],['INT',12,'+1'],['SAB',14,'+2'],['CAR',10,'+0']],
+  saves:'Força +8, Constituição +6',
+  classe:'Guerreiro Mestre de Batalha',
+  classTraits:[
+    ['Ataque Extra','Pode atacar duas vezes com a ação de Atacar.'],
+    ['Estilo de Combate: Combate Duelista','+2 de dano quando empunha uma arma corpo a corpo com uma mão e nenhuma outra arma na outra mão.'],
+    ['Retomar o Fôlego','Ação bônus, uma vez por descanso curto ou longo: recupera 1d10+6 PV.'],
+    ['Surto de Ação','Uma vez por descanso curto ou longo: uma ação adicional no seu turno.'],
+    ['Combatividade Superior (Mestre de Batalha)','4 dados de superioridade (d8). Recupera todos num descanso curto ou longo. CD das manobras: 16.'],
+    ['Manobra: Ataque Ameaçador','Ao acertar um ataque com arma: soma o dado ao dano e o alvo faz TR de Sabedoria (CD 16) ou fica amedrontado até o fim do seu próximo turno.'],
+    ['Manobra: Ataque Preciso','Antes ou depois de rolar um teste de ataque com arma: gasta 1 dado e soma ao teste — pode transformar um erro em acerto.'],
+    ['Manobra: Golpe Arrasador','Ao acertar um ataque: soma o dado ao dano e força o alvo a um TR de Força (CD 16); se falhar, cai caído.']
+  ],
+  raceTraits:[
+    ['Visão no Escuro','18m.'],
+    ['Resiliência Anã','Vantagem em testes de resistência contra veneno; resistência a dano de veneno.'],
+    ['Treinamento em Armas Anãs','Proficiência com machado de batalha, machadinha, martelo leve e martelo de guerra.'],
+    ['Treinamento com Armadura Anã','Proficiência com armadura leve e média (redundante aqui, já que a classe de Guerreiro já cobre isso e mais: pesada também).']
+  ],
+  actions:[
+    ['Machado de batalha (uma mão + escudo)', 8, '1d8+9 cortante.'],
+    ['Machado de batalha (duas mãos, versátil)', 8, '1d10+7 cortante.']
+  ],
+  bonus:['Retomar o Fôlego (1x por descanso)'],
+  resources:[{key:'sup', label:'Dados de Superioridade (d8)', max:4, reset:'short'},{key:'secondwind', label:'Retomar o Fôlego', max:1, reset:'short'},{key:'actionsurge', label:'Surto de Ação', max:1, reset:'short'}],
+  tactic:'Entra na frente e absorve os ataques que iriam nos mais frágeis — maior CA e PV do grupo. Com Ataque Extra, ataca duas vezes por turno; com escudo equipado (Combate Duelista), cada golpe causa 1d8+9 corpo a corpo sem abrir mão da CA 18. Usa Golpe Arrasador pra derrubar o alvo e abrir vantagem pro resto do grupo atacar corpo a corpo; Ataque Ameaçador pra afastar um inimigo perigoso de um aliado frágil; Ataque Preciso no próprio ataque quando um golpe importante errar. Surto de Ação dá uma ação extra além da normal (mais a ação bônus de sempre, se tiver uma disponível) — com dois ataques por ação agora, isso pode significar até 4 ataques numa rodada decisiva.'
+},
+{
+  id:'mila', accent:'var(--c-mila)', name:'Mila Valentine', subtitle:'Monja (Mestre Bêbado) 6 · Tiefling',
+  ac:15, hp:39, speed:'13,5m', initValue:3, initFormula:'Destreza',
+  abilities:[['FOR',8,'-1'],['DES',17,'+3'],['CON',12,'+1'],['INT',9,'-1'],['SAB',14,'+2'],['CAR',15,'+2']],
+  saves:'Força +2, Destreza +6',
+  classe:'Monja Mestre Bêbado',
+  classTraits:[
+    ['Defesa sem Armadura','CA = 10 + Des + Sab = 15 (sem armadura nem escudo).'],
+    ['Artes Marciais','Você pode usar destreza ao invés de força e 1d6 ao invés do dano de seus ataques desarmados ou armas de monge. E pode atacar desarmada com a ação bônus após atacar com uma arma de monge ou desarmada.'],
+    ['Ataque Extra','Pode atacar duas vezes com a ação de Atacar.'],
+    ['Golpe Atordoante','Uma vez por turno, ao acertar um ataque com arma de monge (ou desarmado): pode gastar 1 ki pra forçar TR de Constituição no alvo; se falhar, fica atordoada até o fim do seu próximo turno (não pode agir, não pode se mover, testes de ataque contra ela têm vantagem).'],
+    ['Pontos de Ki (6)','Além do Golpe Atordoante:<br>• <b>Rajada de Golpes (1 ki)</b> +2 ataques desarmados extras<br>• <b>Defesa Paciente (1 ki)</b> usa a ação Esquivar — ataques contra ela ficam com desvantagem se ela ver o atacante, e ela ganha vantagem em TR de Destreza<br>• <b>Redirecionar Ataque (1 ki)</b> (reação, Balanço Bêbado) quando uma criatura errar um ataque corpo a corpo contra ela, o ataque acerta outra criatura à escolha dela — que ela veja e que esteja a 1,5m dela<br>• <b>Passo do Vento (1 ki)</b> +3m +Desengajar, e a distância do salto dobra nesse turno'],
+    ['Movimento sem Armadura','Bônus de deslocamento de +4,5m enquanto sem armadura nem escudo (já somado ao deslocamento de 13,5m).'],
+    ['Golpes de Chi','Seus golpes desarmados contam como armas mágicas para ultrapassar resistência ou imunidade a ataques e danos não-mágicos.'],
+    ['Desviar Projéteis','(Reação) Reduz o dano de um ataque a distância em 1d10+8. Se o dano chegar a 0 pode gastar 1 ki para arremessar de volta — acerto +6, dano 1d6+3, alcance 6/18m.'],
+    ['Balanço Bêbado (Mestre Bêbado)','<b>Levantar do Chão:</b> quando caída, pode se levantar gastando 3m de deslocamento, em vez de metade do deslocamento.<br><b>Redirecionar Ataque:</b> quando uma criatura errar um ataque corpo a corpo contra ela, pode gastar 1 ki como reação para fazer esse ataque acertar outra criatura à sua escolha, desde que a veja e que esteja a 1,5m dela.'],
+    ['Técnica Bêbada (Mestre Bêbado)','Ao usar Rajada de Golpes, ganha automaticamente o benefício da ação Desengajar e seu deslocamento aumenta em 3m até o fim do turno — sem custo de ki adicional.']
+  ],
+  raceTraits:[
+    ['Visão no Escuro','18m.'],
+    ['Resistência Infernal','Resistência a dano de fogo.'],
+    ['Legado Infernal','Truque e magia reativa próprios — listados na seção de Magias abaixo pra ficarem à mão durante o combate.']
+  ],
+  actions:[
+    ['Bordão (duas mãos)', 6, '1d8+3 contundente.'],
+    ['Ataque desarmado', 6, '1d6+3 contundente.'],
+    ['Rajada de Golpes (1 ki)', 6, 'Ação bônus: 2 ataques desarmados adicionais, +6 cada, 1d6+3 (substitui o ataque bônus grátis acima nesse turno).']
+  ],
+  bonus:['Ataque desarmado','Rajada de Golpes (1 ki)','Defesa Paciente (1 ki)','Passo do Vento (1 ki)'],
+  resources:[{key:'ki', label:'Ki', max:6, reset:'short'},{key:'legado', label:'Repreensão Infernal', max:1, reset:'long'}],
+  spells:[
+    {group:'Legado Infernal (racial)', items:[
+      ['Taumaturgia','truque · ação · alcance 9m','Efeito menor de manifestação divina/infernal (voz alta, portas abrindo/fechando, olhos brilham, luzes tremulando); utilidade, não combate.'],
+      ['Repreensão Infernal','reação · alcance 18m · 1x descanso longo','Quando sofre dano de uma criatura visível a até 18m, pode usar a reação pra envolvê-la em chamas: TR de Destreza (CD 12) ou sofre 3d10 de dano de fogo (metade no sucesso). Já vem automaticamente conjurada como magia de 2º círculo (upada), por isso o dano maior que o normal de 1º círculo.']
+    ]}
+  ],
+  tactic:'Entra rápido (12m de deslocamento) e ataca com o bordão de duas mãos (1d8+3), agora duas vezes por turno com Ataque Extra. Golpe Atordoante é a grande novidade: gastar 1 ki pra tentar atordoar um alvo perigoso pode travar o turno dele por completo — vale mais em um ataque que já vai acertar mesmo. Usa Rajada de Golpes quando quiser ainda mais ataques numa rodada — a Técnica Bêbada já vem junto sem custo extra, então ela bate várias vezes e sai sem sofrer ataque de oportunidade. Guarda a Repreensão Infernal pra revidar um golpe grande que valha a pena (3d10 é dano alto). Gerencia os 5 pontos de ki com cautela: não gasta tudo cedo, guarda pelo menos 1 pra Defesa Paciente se ficar com PV baixo.'
+}
+];
+
+const tabsEl = document.getElementById('tabs');
+const blocksEl = document.getElementById('blocks');
+
+chars.forEach((c,i)=>{
+  const btn = document.createElement('button');
+  btn.style.setProperty('--accent', c.accent);
+  btn.innerHTML = `<span class="tab-dot" style="background:${c.accent}"></span>${c.name.split(' ')[0]}`;
+  btn.onclick = ()=>selectTab(c.id);
+  btn.id = 'tab-'+c.id;
+  tabsEl.appendChild(btn);
+
+  const block = document.createElement('div');
+  block.className = 'statblock';
+  block.id = 'block-'+c.id;
+
+  const abilitiesHtml = c.abilities.map(a=>`
+    <div class="ability">
+      <div class="lab">${a[0]}</div>
+      <div class="val">${a[1]}</div>
+      <div class="mod">${a[2]}</div>
+    </div>`).join('');
+
+  const classTraitsHtml = c.classTraits.map(t=>`
+    <div class="entry"><b>${t[0]}.</b> <span class="desc">${t[1]}</span></div>`).join('');
+
+  const raceTraitsHtml = c.raceTraits.map(t=>`
+    <div class="entry"><b>${t[0]}.</b> <span class="desc">${t[1]}</span></div>`).join('');
+
+  const actionsHtml = c.actions.map(a=>{
+    const badge = (a[1]!==null) ? `<span class="hit-badge" data-bonus="${a[1]}">+${a[1]}</span>` : '';
+    return `<div class="entry"><b>${a[0]}.</b>${badge} <span class="desc">${a[2]}</span></div>`;
+  }).join('');
+
+  const bonusHtml = c.bonus.map(b=>`<div class="entry desc">• ${b}</div>`).join('');
+
+  let resourcesHtml = '';
+  if(c.resources){
+    resourcesHtml += `<div class="section-title">Recursos</div><div class="resources-box">`;
+    c.resources.forEach(r=>{
+      let dots = '';
+      for(let d=0; d<r.max; d++){
+        dots += `<span class="res-dot" data-charid="${c.id}" data-key="${r.key}" data-reset="${r.reset}" data-idx="${d}"></span>`;
+      }
+      resourcesHtml += `<div class="res-group"><span class="res-label">${r.label}</span><div class="res-dots">${dots}</div></div>`;
+    });
+    resourcesHtml += `</div>`;
+  }
+
+  let wildShapeBlockHtml = '';
+  if(c.wildShapes){
+    let btns = c.wildShapes.map((w,wi)=>`<button class="ws-btn" data-charid="${c.id}" data-idx="${wi}">${w.name}<span class="ws-nd">ND ${w.nd}</span></button>`).join('');
+    wildShapeBlockHtml = `
+      <div class="section-title">Escolher Forma Selvagem</div>
+      <div class="wildshape-picker" id="wspicker-${c.id}">${btns}</div>
+      <div id="ws-active-${c.id}"><div class="ws-empty">Nenhuma forma selecionada — toque num botão acima pra ver as ações dela aqui.</div></div>
+    `;
+  }
+
+  let spellsHtml = '';
+  if(c.spells){
+    spellsHtml += `<div class="section-title consult">Magias</div>`;
+    c.spells.forEach(group=>{
+      spellsHtml += `<div class="spell-group-title">${group.group}</div>`;
+      group.items.forEach(sp=>{
+        spellsHtml += `
+        <details class="spell">
+          <summary>${sp[0]}<span class="lvl">${sp[1]}</span></summary>
+          <p>${sp[2]}</p>
+        </details>`;
+      });
+    });
+  }
+
+  const condHtml = CONDITIONS.map(cond=>`<span class="cond-chip" data-charid="${c.id}" data-cond="${cond}">${cond}</span>`).join('');
+
+  block.innerHTML = `
+    <div class="card" style="--accent:${c.accent}">
+      <h2 class="name">${c.name}</h2>
+      <div class="subtitle">${c.subtitle}</div>
+      <hr class="rule thick">
+      <div class="topline"><b>Classe de Armadura</b> ${c.ac} &nbsp;·&nbsp; <b>Deslocamento</b> ${c.speed}</div>
+      <div class="hp-row">
+        <div class="hp-tracker">
+          <b>PV atual</b>
+          <input type="text" class="hp-input" data-id="${c.id}" data-current="${c.hp}" value="${c.hp}" placeholder="ex: -5">
+          <span>/ ${c.hp}</span>
+          <div class="hp-bar"><div class="hp-bar-fill" id="hpbar-${c.id}" style="width:100%; background:${c.accent}"></div></div>
+        </div>
+        <button class="long-rest-btn" data-charid="${c.id}">🌙 Descanso Longo</button>
+        <button class="short-rest-btn" data-charid="${c.id}">🔥 Descanso Curto</button>
+      </div>
+      <div class="topline">
+        <b>Iniciativa</b>
+        <input type="number" class="init-input" data-id="${c.id}" value="${c.initValue}">
+        <span style="font-size:12px; opacity:.7;">(${c.initFormula})</span>
+      </div>
+      <div class="abilities">${abilitiesHtml}</div>
+      <div class="topline"><b>Resistências</b> ${c.saves}</div>
+
+      <details class="cond-details">
+        <summary>
+          <span>Condições</span>
+          <span class="cond-summary-tags" id="condsum-${c.id}"><span class="cond-summary-none">nenhuma</span></span>
+        </summary>
+        <div class="conditions-box">${condHtml}</div>
+      </details>
+
+      ${resourcesHtml}
+      <div class="section-title">Ações</div>
+      ${wildShapeBlockHtml}
+      ${actionsHtml}
+      <div class="section-title">Ação Bônus disponível</div>
+      ${bonusHtml}
+
+      <div class="section-title consult">Características de Classe</div>
+      ${classTraitsHtml}
+
+      <details class="race-details">
+        <summary>Características de Raça (consulta)</summary>
+        <div class="race-traits-box">${raceTraitsHtml}</div>
+      </details>
+
+      ${spellsHtml}
+
+      <div class="section-title">Tática de Combate</div>
+      <div class="tactic">${c.tactic}</div>
+    </div>
+  `;
+  blocksEl.appendChild(block);
+});
+
+function selectTab(id){
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.statblock').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  document.getElementById('block-'+id).classList.add('active');
+  saveState();
+}
+
+const STORAGE_KEY = 'dndCompendioAltissimoEstado';
+
+function saveState(){
+  try{
+    const state = {hp:{}, wsHp:{}, resUsed:[], condActive:[], activeWildshape:{}, activeTab:null};
+    document.querySelectorAll('.hp-input:not(.ws-hp-input)').forEach(inp=>{
+      state.hp[inp.dataset.id] = inp.dataset.current;
+    });
+    document.querySelectorAll('.ws-hp-input').forEach(inp=>{
+      state.wsHp[inp.dataset.charid] = inp.dataset.current;
+    });
+    document.querySelectorAll('.res-dot.used').forEach(d=>{
+      state.resUsed.push(`${d.dataset.charid}|${d.dataset.key}|${d.dataset.idx}`);
+    });
+    document.querySelectorAll('.cond-chip.active').forEach(ch=>{
+      state.condActive.push(`${ch.dataset.charid}|${ch.dataset.cond}`);
+    });
+    document.querySelectorAll('.ws-btn.active').forEach(btn=>{
+      state.activeWildshape[btn.dataset.charid] = btn.dataset.idx;
+    });
+    const activeBlock = document.querySelector('.statblock.active');
+    if(activeBlock) state.activeTab = activeBlock.id.replace('block-','');
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }catch(err){}
+}
+
+function loadState(){
+  let state = null;
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) state = JSON.parse(raw);
+  }catch(err){}
+
+  if(state){
+    Object.keys(state.hp || {}).forEach(id=>{
+      const inp = document.querySelector(`.hp-input[data-id="${id}"]`);
+      const c = chars.find(ch=>ch.id===id);
+      if(inp && c){
+        const val = parseFloat(state.hp[id]);
+        inp.value = val;
+        inp.dataset.current = val;
+        const pct = Math.max(0, Math.min(100, (val / c.hp) * 100));
+        const bar = document.getElementById('hpbar-'+id);
+        if(bar) bar.style.width = pct + '%';
+      }
+    });
+    (state.resUsed || []).forEach(key=>{
+      const [charid, rkey, idx] = key.split('|');
+      const dot = document.querySelector(`.res-dot[data-charid="${charid}"][data-key="${rkey}"][data-idx="${idx}"]`);
+      if(dot) dot.classList.add('used');
+    });
+    const condCharIds = new Set();
+    (state.condActive || []).forEach(key=>{
+      const [charid, cond] = key.split('|');
+      const chip = document.querySelector(`.cond-chip[data-charid="${charid}"][data-cond="${cond}"]`);
+      if(chip){ chip.classList.add('active'); condCharIds.add(charid); }
+    });
+    condCharIds.forEach(id=>updateCondSummary(id));
+    Object.keys(state.activeWildshape || {}).forEach(charId=>{
+      const idx = parseInt(state.activeWildshape[charId]);
+      const btn = document.querySelector(`.ws-btn[data-charid="${charId}"][data-idx="${idx}"]`);
+      if(btn){
+        btn.classList.add('active');
+        renderWildShape(charId, idx);
+        const wsVal = state.wsHp && state.wsHp[charId];
+        if(wsVal !== undefined){
+          const wsInp = document.querySelector(`.ws-hp-input[data-charid="${charId}"]`);
+          if(wsInp){
+            const val = parseFloat(wsVal);
+            const max = parseFloat(wsInp.dataset.max);
+            wsInp.value = val;
+            wsInp.dataset.current = val;
+            const pct = Math.max(0, Math.min(100, (val / max) * 100));
+            const bar = document.getElementById('wshpbar-'+charId);
+            if(bar) bar.style.width = pct + '%';
+          }
+        }
+      }
+    });
+  }
+  selectTab((state && state.activeTab) || 'berrian');
+}
+loadState();
+
+function recalcHits(){
+  document.querySelectorAll('.hit-badge').forEach(b=>{
+    const bonus = parseInt(b.dataset.bonus);
+    b.textContent = `+${bonus}`;
+  });
+}
+recalcHits();
+
+function renderWildShape(charId, idx){
+  const c = chars.find(ch=>ch.id===charId);
+  const w = c.wildShapes[idx];
+  const actionsHtml = w.actions.map(a=>{
+    return `<div class="entry"><b>${a.name}.</b>${a.bonus!=null?`<span class="hit-badge" data-bonus="${a.bonus}">+${a.bonus}</span>`:''} <span class="desc">${a.dmg}</span></div>`;
+  }).join('');
+  const traitsHtml = w.traits.map(t=>`<div class="entry"><b>${t.name}.</b> <span class="desc">${t.desc}</span></div>`).join('');
+  document.getElementById('ws-active-'+charId).innerHTML = `
+    <div class="ws-card" style="--accent:${c.accent}">
+      <div class="ws-card-head"><b>${w.name}</b><span class="ws-env">${w.env}</span></div>
+      <div class="topline"><b>CA</b> ${w.ac} &nbsp;·&nbsp; <b>Deslocamento</b> ${w.speed} &nbsp;·&nbsp; <span style="opacity:.75">(${w.hpDice})</span></div>
+      <div class="hp-row ws-hp-row">
+        <div class="hp-tracker">
+          <b>PV</b>
+          <input type="text" class="hp-input ws-hp-input" data-charid="${charId}" data-max="${w.hp}" data-current="${w.hp}" value="${w.hp}" placeholder="ex: -5">
+          <span>/ ${w.hp}</span>
+          <div class="hp-bar"><div class="hp-bar-fill" id="wshpbar-${charId}" style="width:100%; background:var(--c-nephile)"></div></div>
+        </div>
+      </div>
+      <div class="ws-abilities">
+        <div class="ability"><div class="lab">FOR</div><div class="val">${w.str[0]}</div><div class="mod">${w.str[1]}</div></div>
+        <div class="ability"><div class="lab">DES</div><div class="val">${w.dex[0]}</div><div class="mod">${w.dex[1]}</div></div>
+        <div class="ability"><div class="lab">CON</div><div class="val">${w.con[0]}</div><div class="mod">${w.con[1]}</div></div>
+      </div>
+      <div class="section-title" style="margin-top:14px;">Ações da Forma</div>
+      ${actionsHtml}
+      ${traitsHtml ? `<div class="section-title" style="margin-top:14px;">Traços da Forma</div>${traitsHtml}` : ''}
+    </div>
+  `;
+  recalcHits();
+}
+
+function clearWildShape(charId){
+  document.getElementById('ws-active-'+charId).innerHTML = `<div class="ws-empty">Nenhuma forma selecionada — toque num botão acima pra ver as ações dela aqui.</div>`;
+}
+
+function updateCondSummary(charId){
+  const el = document.getElementById('condsum-'+charId);
+  const active = document.querySelectorAll(`.cond-chip[data-charid="${charId}"].active`);
+  if(active.length === 0){
+    el.innerHTML = `<span class="cond-summary-none">nenhuma</span>`;
+  } else {
+    el.innerHTML = Array.from(active).map(c=>`<span class="cond-summary-tag">${c.dataset.cond}</span>`).join('');
+  }
+}
+
+document.addEventListener('click', (e)=>{
+  if(e.target.classList.contains('res-dot')){
+    e.target.classList.toggle('used');
+  }
+  if(e.target.classList.contains('cond-chip')){
+    e.target.classList.toggle('active');
+    updateCondSummary(e.target.dataset.charid);
+  }
+  if(e.target.closest('.ws-btn')){
+    const btn = e.target.closest('.ws-btn');
+    const charId = btn.dataset.charid;
+    const idx = parseInt(btn.dataset.idx);
+    const alreadyActive = btn.classList.contains('active');
+    document.querySelectorAll(`#wspicker-${charId} .ws-btn`).forEach(b=>b.classList.remove('active'));
+    if(alreadyActive){
+      clearWildShape(charId);
+    } else {
+      btn.classList.add('active');
+      renderWildShape(charId, idx);
+    }
+  }
+  if(e.target.classList.contains('long-rest-btn')){
+    const id = e.target.dataset.charid;
+    const c = chars.find(ch=>ch.id===id);
+    const hpInput = document.querySelector(`.hp-input[data-id="${id}"]`);
+    if(hpInput){
+      hpInput.value = c.hp;
+      hpInput.dataset.current = c.hp;
+      const bar = document.getElementById('hpbar-'+id);
+      if(bar) bar.style.width = '100%';
+    }
+    document.querySelectorAll(`.res-dot[data-charid="${id}"][data-reset="long"]`).forEach(d=>d.classList.remove('used'));
+    document.querySelectorAll(`.res-dot[data-charid="${id}"][data-reset="short"]`).forEach(d=>d.classList.remove('used'));
+    document.querySelectorAll(`.cond-chip[data-charid="${id}"]`).forEach(ch=>ch.classList.remove('active'));
+    updateCondSummary(id);
+  }
+  if(e.target.classList.contains('short-rest-btn')){
+    const id = e.target.dataset.charid;
+    document.querySelectorAll(`.res-dot[data-charid="${id}"][data-reset="short"]`).forEach(d=>d.classList.remove('used'));
+  }
+  saveState();
+});
+
+function resolveHpInput(input){
+  const isWs = input.classList.contains('ws-hp-input');
+  const id = isWs ? input.dataset.charid : input.dataset.id;
+  const max = isWs ? parseFloat(input.dataset.max) : chars.find(ch=>ch.id===id).hp;
+  const base = parseFloat(input.dataset.current);
+  const raw = input.value.trim().replace(',', '.');
+  let result;
+  const opMatch = raw.match(/([+\-*/])\s*(\d+(?:\.\d+)?)\s*$/);
+  if(opMatch){
+    const op = opMatch[1];
+    const num = parseFloat(opMatch[2]);
+    if(op === '+') result = base + num;
+    else if(op === '-') result = base - num;
+    else if(op === '*') result = base * num;
+    else if(op === '/') result = num !== 0 ? base / num : base;
+  } else {
+    const plain = parseFloat(raw);
+    result = isNaN(plain) ? base : plain;
+  }
+  result = Math.round(result);
+  if(result < 0) result = 0;
+  if(result > max) result = max;
+  input.value = result;
+  input.dataset.current = result;
+  const pct = Math.max(0, Math.min(100, (result / max) * 100));
+  const bar = document.getElementById((isWs ? 'wshpbar-' : 'hpbar-')+id);
+  if(bar) bar.style.width = pct + '%';
+  saveState();
+}
+document.addEventListener('change', (e)=>{
+  if(e.target.classList.contains('hp-input')) resolveHpInput(e.target);
+});
+document.addEventListener('focus', (e)=>{
+  if(e.target.classList.contains('hp-input')){
+    const len = e.target.value.length;
+    e.target.setSelectionRange(len, len);
+  }
+}, true);
+document.addEventListener('keydown', (e)=>{
+  if(e.target.classList.contains('hp-input') && e.key === 'Enter'){
+    e.preventDefault();
+    resolveHpInput(e.target);
+    e.target.blur();
+  }
+});
+
+document.addEventListener('input', (e)=>{
+  if(e.target.classList.contains('init-input')){
+    const id = e.target.dataset.id;
+    let val = parseInt(e.target.value);
+    if(isNaN(val)) val = 0;
+    const qrCell = document.getElementById('qr-init-'+id);
+    if(qrCell) qrCell.textContent = (val >= 0 ? '+' : '') + val;
+  }
+});
+</script>
+
+</body>
+</html>
