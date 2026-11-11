@@ -326,6 +326,8 @@
   details.spell[open] summary::after{content:'−';}
   details.spell summary::after{flex:none; margin-left:4px;}
   details.spell .lvl{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent); font-weight:400; margin-left:auto; padding-left:10px; text-align:right; flex:1 1 0; min-width:0; overflow-wrap:anywhere; word-break:break-word; line-height:1.35;}
+  .spell-meta{display:flex; flex-direction:column; gap:2px; margin:0 0 8px; padding:6px 8px; background:rgba(255,255,255,0.04); border-left:2px solid var(--accent); border-radius:3px; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--parchment-dim); line-height:1.4;}
+  .spell-meta b{color:var(--accent); font-weight:500; margin-right:4px;}
   details.spell p{margin:0 12px 12px; color:var(--parchment-dim); font-size:15px;}
   details.spell .spell-uses{margin:-4px 12px 12px;}
   .spell-group-title{font-size:13px; color:var(--parchment-dim); font-family:'JetBrains Mono',monospace; margin:14px 0 4px; text-transform:uppercase; letter-spacing:.06em;}
@@ -352,6 +354,31 @@
 <footer>Nível 6 · Proficiência +3 · monta lentamente conforme o grupo evolui</footer>
 
 <script>
+const M = (t,a,d)=>`<span class="spell-meta"><span><b>Tempo de conjuração</b> ${t}</span><span><b>Alcance</b> ${a}</span><span><b>Duração</b> ${d.replace(/^(conc\.,?\s*|concentração,?\s*)/i,'')}</span>${/conc\.|concentraç/i.test(d) ? '<span><b>Concentração</b> Sim</span>' : ''}</span>`;
+const SPELL_META = {
+'Amizade Animal':['ação','9 m','24 horas','Não'],'Constrição':['ação','27 m','conc., até 1 minuto','Sim'],'Fogo das Fadas':['ação','18 m','conc., até 1 minuto','Sim'],'Onda Trovejante':['ação','pessoal (cubo de 4,5 m)','instantânea','Não'],
+'Crescer Espinhos':['ação','45 m','conc., até 10 minutos','Sim'],'Esfera Flamejante':['ação','18 m','conc., até 1 minuto','Sim'],'Esquentar Metal':['ação','18 m','conc., até 1 minuto','Sim'],'Imobilizar Pessoas':['ação','18 m','conc., até 1 minuto','Sim'],'Passos sem Pegadas':['ação','pessoal (emanação de 9 m)','conc., até 1 hora','Sim'],'Pele de Árvore':['ação','toque','conc., até 1 hora','Sim'],'Raio Lunar':['ação','36 m','conc., até 1 minuto','Sim'],'Restauração Menor':['ação','toque','instantânea','Não'],'Sentido Bestial':['ação (ou ritual)','toque','conc., até 1 hora','Sim'],
+'Convocar Relâmpagos':['ação','pessoal (nuvem num ponto a até 36 m)','conc., até 10 minutos','Sim'],'Conjurar Animais':['ação','18 m','conc., até 1 hora','Sim'],'Dissipar Magia':['ação','36 m','instantânea','Não'],'Muralha de Vento':['ação','36 m','conc., até 1 minuto','Sim'],
+'Bordão Místico':['ação bônus','toque','1 minuto','Não'],'Druidismo':['ação','9 m','instantânea ou efeito específico','Não'],'Orientação':['ação','toque','conc., até 1 minuto','Sim'],
+'Taumaturgia':['ação','9 m','até 1 minuto','Não'],'Repreensão Infernal':['reação (quando sofre dano de criatura visível)','18 m','instantânea','Não'],
+'Chama Sagrada':['ação','18 m','instantânea','Não'],'Poupar o Moribundo':['ação','toque','instantânea','Não'],'Bênção':['ação','9 m','conc., até 1 minuto','Sim'],'Curar Ferimentos':['ação','toque','instantânea','Não'],'Arma Espiritual':['ação bônus','18 m','1 minuto','Não'],'Sinal de Esperança':['ação','9 m','conc., até 1 minuto','Sim'],'Revivificar':['ação','toque','instantânea','Não'],'Infligir Ferimentos':['ação','toque','instantânea','Não'],'Escudo da Fé':['ação bônus','18 m','conc., até 10 minutos','Sim'],'Perdição':['ação','9 m','conc., até 1 minuto','Sim'],'Raio Guiador':['ação','36 m','1 rodada','Não'],'Comando':['ação','18 m','1 rodada','Não'],'Ajuda':['ação','9 m','8 horas','Não'],'Oração Curativa':['10 minutos','9 m','instantânea','Não'],'Falar com os Mortos':['ação','3 m','10 minutos','Não'],'Animar Mortos':['1 minuto','3 m','instantânea (cria servo por 24 horas)','Não'],'Espíritos Guardiões':['ação','pessoal (emanação de 4,5 m)','conc., até 10 minutos','Sim'],'Zona da Verdade':['ação','18 m','10 minutos','Não'],
+'Criar Chamas':['ação bônus','pessoal','10 minutos','Não'],'Mensagem':['ação','36 m','1 rodada','Não'],'Marca do Predador':['ação bônus','27 m','conc., até 1 hora','Sim'],'Palavra Curativa':['ação bônus','18 m','instantânea','Não'],'Passos Largos':['ação','toque','1 hora','Não'],'Passos sem Rastro':['ação','pessoal (emanação de 9 m)','conc., até 1 hora','Sim'],'Saraivada de Espinhos':['ação bônus (após acertar ataque à distância)','pessoal','instantânea','Não'],'Absorver Elementos':['reação (ao sofrer dano dos tipos indicados)','pessoal','1 rodada','Não'],'Arma Mágica':['ação bônus','toque','1 hora','Não'],'Auxílio':['ação','9 m','8 horas','Não'],'Falar com Animais':['ação (ou ritual)','pessoal','10 minutos','Não'],'Golpe de Zephyr':['ação bônus','pessoal','conc., até 1 minuto','Sim']
+};
+function spellSummary(sp){
+  const m=SPELL_META[sp[0]];
+  const raw=String(sp[1]||'');
+  const casting=m ? m[0] : (raw.split('·')[0].trim() || 'ver descrição');
+  const concentration=m ? m[3] : (/conc\.|concentraç/i.test(raw) ? 'Sim' : 'Não');
+  return `${casting}${concentration==='Sim' ? ' · concentração' : ''}`;
+}
+function spellDescription(sp){
+  const desc=sp[2]||'';
+  if(desc.includes('spell-meta')) return desc;
+  const m=SPELL_META[sp[0]];
+  if(!m) return '<span class="spell-meta"><span><b>Tempo de conjuração</b> '+(String(sp[1]).split('·')[1]?.trim()||'ver descrição')+'</span><span><b>Alcance</b> a confirmar</span><span><b>Duração</b> a confirmar</span></span>'+desc;
+  return M(m[0],m[1],m[2])+desc;
+}
+
 const CONDITIONS = ['Caído','Amedrontado','Envenenado','Paralisado','Concentração','Invisível'];
 
 const chars = [
@@ -359,17 +386,17 @@ const chars = [
   id:'berrian', accent:'var(--c-berrian)', name:'Berrian Liadon', subtitle:'Guardião (Senhor das Feras) 6 · Elfo Silvestre',
   ac:16, hp:52, speed:'13,5m · escalada 13,5m · natação 13,5m', initValue:4, initFormula:'Destreza',
   abilities:[['FOR',10,'+0'],['DES',18,'+4'],['CON',14,'+2'],['INT',8,'-1'],['SAB',16,'+3'],['CAR',8,'-1']],
-  saves:'Destreza +7, Força +4',
+  saves:'Destreza +7, Força +3',
   classe:'Guardião Senhor das Feras',
   classTraits:[
-    ['Maestria em Armas','Maestria em 2 tipos de armas (pode trocar após descanso longo) — aplicada na Espada Curta (Vex) e na Cimitarra (Nick).'],
-    ['Estilo de Luta: Combatente de Duas Armas','Soma o modificador de habilidade (+4) ao dano dos ataques extras da propriedade Leve (já contado).'],
-    ['Especialista','Dobra a proficiência numa perícia (Furtividade) — por isso o +10 na perícia.'],
-    ['+2 Idiomas','Dracônico e Goblin (nível 2).'],
+    ['Maestria em Armas','Você pode usar a maestria de dois tipos de armas e trocar uma escolha ao terminar um descanso longo.'],
+    ['Estilo de Luta: Combatente de Duas Armas','Adiciona o modificador de Destreza (+4) ao dano do ataque extra da propriedade Leve.'],
+    ['Especialista','Dobra o Bônus de Proficiência em Furtividade, totalizando +10.'],
+    ['Idiomas adicionais','Dracônico e Goblin.'],
     ['Ataque Extra','Pode atacar duas vezes com a ação de Atacar.'],
-    ['Errante (6º nível)','+3m de deslocamento (já somado) e deslocamentos de escalada e natação iguais ao deslocamento normal.'],
-    ['Talento: Duelista Defensivo','+1 em Destreza (já contado). <b>Aparar (reação):</b> se estiver segurando uma arma de Acuidade e uma criatura acertar você com um ataque corpo a corpo, soma seu Bônus de Proficiência (+3) à CA contra ataques corpo a corpo até o início do seu próximo turno.'],
-    ['Talento: Iniciado em Magia (Guia)','Ganha dois truques e uma magia de 1º círculo da lista de druida (Criar Chamas, Mensagem, Palavra Curativa). A magia de 1º círculo pode ser conjurada 1x por dia sem gastar espaço.'],
+    ['Errante','Aumenta o deslocamento em 3 m e concede deslocamento de escalada e natação igual ao deslocamento normal.'],
+    ['Talento: Duelista Defensivo','Destreza aumentada em 1. <b>Aparar (reação):</b> ao ser atingido por um ataque corpo a corpo enquanto segura uma arma de Acuidade, recebe +3 na CA contra ataques corpo a corpo até o início do próximo turno.'],
+    ['Talento: Iniciado em Magia (Guia)','Aprende os truques Criar Chamas e Mensagem e a magia Palavra Curativa, conjurável uma vez por descanso longo sem gastar espaço.'],
     ['Invocação da Fera Primal (Senhor das Feras, 3º)','Invoca uma fera primal e escolhe o bloco (Terra, Céu ou Mar), o tipo de animal e a aparência. Ela tem sinais primais que mostram a origem mágica, é amigável com você e seus aliados, obedece aos seus comandos e some se você morrer.'],
     ['A Fera em Combate','Ela age no seu turno, pode se mover e usar a própria Reação. A única ação que faz sozinha é Esquivar. Para qualquer outra ação, você gasta sua ação bônus.'],
     ['Golpe da Fera','Você pode sacrificar um dos seus ataques da ação Atacar para ordenar o Golpe da Fera. Se você estiver incapacitado, ela age sozinha e não fica presa a Esquivar.'],
@@ -377,40 +404,40 @@ const chars = [
     ['Fera Nova (descanso longo)','A cada descanso longo você pode invocar uma fera diferente, com outro bloco e outra aparência. A antiga desaparece.']
   ],
   raceTraits:[
-    ['Visão no Escuro','18m.'],
-    ['Truque Aprendido','Arte Druídica.'],
-    ['Magias Aprendidas (racial)','Passos Largos e Passos sem Rastro.'],
-    ['Vantagem','Pra evitar ficar Enfeitiçado.'],
-    ['Descanso Longo','Meditação de 4h; não precisa dormir por causa de magias.'],
-    ['Proficiência','Percepção.']
+    ['Visão no Escuro','Enxerga na penumbra a até 18 m como se fosse luz plena e na escuridão como se fosse penumbra.'],
+    ['Arte Druídica','Conhece o truque Arte Druídica.'],
+    ['Magias Élficas','Aprende Passos Largos e Passos sem Rastro, cada uma conjurável uma vez por descanso longo sem gastar espaço.'],
+    ['Ancestralidade Feérica','Tem vantagem em salvaguardas para evitar ou encerrar a condição Enfeitiçado.'],
+    ['Transe','Medita por 4 horas durante um descanso longo e não pode ser colocado para dormir por magia.'],
+    ['Sentidos Aguçados','Tem proficiência em Percepção.']
   ],
   actions:[
-    ['Espada Curta', 7, '1d6+4 perfurante. Maestria (Vex): ao acertar, vantagem no próximo ataque contra o mesmo alvo antes do fim do seu próximo turno.'],
-    ['Cimitarra', 7, '1d6+4 cortante. Maestria (Nick): o ataque extra da propriedade Leve sai como parte da ação Atacar, sem gastar ação bônus.'],
-    ['Arco Curto', 7, '1d6+7 perfurante (+4 DES, +3 Cianita).'],
-    ['Golpe da Fera (comando)', 6, '1d8+5 Contundente. Sacrifica um dos seus ataques da ação Atacar para ordenar o Golpe da Fera. Se a fera se moveu 6m ou mais em direção ao alvo antes do acerto: +1d6 do mesmo tipo e o alvo fica Caído (Grande ou menor). Ficha completa da fera logo abaixo.']
+    ['Espada Curta', 7, '1d6+4 perfurante. Maestria — Vex: ao acertar uma criatura, você tem Vantagem na próxima jogada de ataque contra ela antes do fim do seu próximo turno.'],
+    ['Cimitarra', 7, '1d6+4 cortante. Maestria — Nick: permite incluir o ataque extra da propriedade Leve na ação Atacar, em vez de usar uma Ação Bônus.'],
+    ['Arco Curto', 7, '1d6+7 perfurante, incluindo +3 da Cianita. Maestria — Vex: ao acertar uma criatura, você tem Vantagem na próxima jogada de ataque contra ela antes do fim do seu próximo turno.'],
+    ['Golpe da Fera (comando)', 6, '1d8+5 contundente. Substitui um ataque da ação Atacar para comandar a fera. Se ela se mover pelo menos 6 m em linha reta em direção ao alvo antes do acerto, causa +1d6 contundente e o alvo Grande ou menor fica Caído.']
   ],
   bonus:['Marca do Predador (3x)','Saraivada de Espinhos','Arma Mágica','Golpe de Zephyr','Palavra Curativa (1x)','Comandar a fera (qualquer ação além de Esquivar)'],
   resources:[{key:'marca', label:'Marca do Predador', max:3, reset:'long'}, {key:'lvl1', label:'1º Círculo', max:4, reset:'long'}, {key:'lvl2', label:'2º Círculo', max:2, reset:'long'}],
   spells:[
     {group:'Magias sempre aprendidas', items:[
-      ['Marca do Predador','ação bônus · conc. 1h','Marca uma criatura visível como presa: todo ataque seu que acertar ela causa +1d6 de dano Energético extra. Vantagem em Percepção ou Sobrevivência pra rastreá-la. Se o alvo morrer antes do fim da magia, pode transferir a marca pra outro alvo com uma ação bônus.'],
-      ['Palavra Curativa','ação bônus','Cura 2d4 + Sabedoria numa criatura visível a até 18m. <b>Uso sem gastar espaço</b> (Iniciado em Magia), 1x por descanso longo:',{key:'palavra',max:1,reset:'long'}],
-      ['Passos Largos','ação · conc.','+10 pés (3m) de deslocamento no alvo tocado. <b>Uso sem gastar espaço</b> (racial), 1x por descanso longo:',{key:'largos',max:1,reset:'long'}],
-      ['Passos sem Rastro','ação · conc. 1h','Cada criatura à sua escolha a até 9m (incluindo você) ganha +10 em testes de Destreza (Furtividade) e não pode ser rastreada por meios não-mágicos. <b>Uso sem gastar espaço</b> (racial), 1x por descanso longo:',{key:'semrastro',max:1,reset:'long'}]
+      ['Marca do Predador','ação bônus · conc.',M('ação bônus','27 m','conc., até 1h')+'Marca uma criatura visível como presa: todo ataque seu que acertar ela causa +1d6 de dano Energético extra. Vantagem em Percepção ou Sobrevivência pra rastreá-la. Se o alvo morrer antes do fim da magia, pode transferir a marca pra outro alvo com uma ação bônus.'],
+      ['Palavra Curativa','ação bônus',M('ação bônus','18 m','instantânea')+'Cura 2d4 + Sabedoria numa criatura visível a até 18m. <b>Uso sem gastar espaço</b> (Iniciado em Magia), 1x por descanso longo:',{key:'palavra',max:1,reset:'long'}],
+      ['Passos Largos','ação',M('ação','toque','1 hora')+'+10 pés (3m) de deslocamento no alvo tocado. <b>Uso sem gastar espaço</b> (racial), 1x por descanso longo:',{key:'largos',max:1,reset:'long'}],
+      ['Passos sem Rastro','ação · conc.',M('ação','pessoal (emanação de 9 m)','conc., até 1h')+'Você e cada criatura à sua escolha na emanação de 9 m ganham +10 em testes de Destreza (Furtividade) e não deixam rastros. <b>Uso sem gastar espaço</b> (racial), 1x por descanso longo:',{key:'semrastro',max:1,reset:'long'}]
     ]},
     {group:'Magias aprendidas', items:[
-      ['Saraivada de Espinhos','ação bônus · imediatamente após acertar um ataque à distância','O alvo e cada criatura a até 1,5m fazem TR de Destreza, sofrendo 1d10 perfurante se falharem ou metade no sucesso.'],
-      ['Absorver Elementos','reação','<b>Gatilho:</b> você sofre dano de ácido, frio, elétrico, fogo ou trovejante. Reduz pela metade o dano daquele ataque. Até o fim do seu próximo turno, seu próximo acerto corpo a corpo causa +1d6 de dano extra do mesmo tipo.'],
-      ['Arma Mágica','ação bônus · toque · 1h','A arma tocada vira mágica e recebe +1 nas jogadas de ataque e de dano. Não exige concentração.'],
-      ['Auxílio','ação · alcance 9m · 8h','Até 3 criaturas à sua escolha ganham +5 nos PV máximos e nos PV atuais enquanto durar a magia.'],
-      ['Falar com Animais','ação (ritual)','Permite comunicação com bestas por 10 minutos; elas entendem você e podem compartilhar informações da região.'],
-      ['Golpe de Zephyr','ação bônus · pessoal · conc. 1min','Você se move como o vento: até o fim da magia, seu movimento não provoca ataques de oportunidade. Uma vez até o fim da magia, você pode se dar vantagem numa jogada de ataque com arma no seu turno; se o ataque acertar, causa +1d8 de dano Energético extra. Acertando ou errando, seu deslocamento aumenta em 9m até o final desse turno.']
+      ['Saraivada de Espinhos','ação bônus',M('ação bônus (imediatamente após acertar um ataque com arma à distância)','pessoal','instantânea')+'O alvo e cada criatura a até 1,5m fazem TR de Destreza, sofrendo 1d10 perfurante se falharem ou metade no sucesso.'],
+      ['Absorver Elementos','reação',M('reação (ao sofrer dano de ácido, frio, elétrico, fogo ou trovejante)','pessoal','1 rodada')+'Reduz pela metade o dano daquele ataque. Até o fim do seu próximo turno, seu próximo acerto corpo a corpo causa +1d6 de dano extra do mesmo tipo.'],
+      ['Arma Mágica','ação bônus',M('ação bônus','toque','1 hora')+'A arma tocada vira mágica e recebe +1 nas jogadas de ataque e de dano.'],
+      ['Auxílio','ação',M('ação','9 m','8 horas')+'Até 3 criaturas à sua escolha ganham +5 nos PV máximos e nos PV atuais enquanto durar a magia.'],
+      ['Falar com Animais','ação ou ritual',M('ação ou ritual','pessoal','10 minutos')+'Permite comunicação com bestas por 10 minutos; elas entendem você e podem compartilhar informações da região.'],
+      ['Golpe de Zephyr','ação bônus · conc.',M('ação bônus','pessoal','conc., até 1 min')+'Você se move como o vento: até o fim da magia, seu movimento não provoca ataques de oportunidade. Uma vez até o fim da magia, você pode se dar vantagem numa jogada de ataque com arma no seu turno; se o ataque acertar, causa +1d8 de dano Energético extra. Acertando ou errando, seu deslocamento aumenta em 9m até o final desse turno.']
     ]},
     {group:'Truques', items:[
-      ['Arte Druídica','ação','Cria efeitos sensoriais menores (faíscas, símbolos, cheiros) — utilidade, não combate.'],
-      ['Criar Chamas','ação','Chama na mão; pode iluminar como tocha ou ser arremessada como ataque à distância.'],
-      ['Mensagem','ação · alcance 36m','Sussurra uma mensagem pra uma criatura visível no alcance; só ela ouve e pode responder num sussurro que só você ouve.']
+      ['Arte Druídica','ação',M('ação','9 m','instantânea')+'Cria efeitos sensoriais menores (faíscas, símbolos, cheiros) — utilidade, não combate.'],
+      ['Criar Chamas','ação bônus',M('ação bônus','pessoal','10 minutos')+'Chama na mão; pode iluminar como tocha ou ser arremessada como ataque à distância.'],
+      ['Mensagem','ação',M('ação','36 m','1 rodada')+'Sussurra uma mensagem pra uma criatura visível no alcance; só ela ouve e pode responder num sussurro que só você ouve.']
     ]}
   ],
   beast:{
@@ -421,7 +448,7 @@ const chars = [
     traits:[['Vínculo Primal','Adicione seu Bônus de Proficiência a qualquer teste de atributo ou salvaguarda que a fera realizar.']],
     actions:[['Golpe da Fera','<i>Jogada de Ataque Corpo a Corpo:</i> +6, alcance 1,5 m. <i>Dano:</i> 1d8 + 5 de dano Contundente. Se a fera se moveu pelo menos 6 metros em direção ao alvo antes do acerto, o alvo sofre 1d6 pontos de dano adicional do mesmo tipo e tem a condição Caído se for uma criatura Grande ou menor.']]
   },
-  tactic:'Abre o combate usando Marca do Predador (ação bônus) no alvo mais perigoso. Com Ataque Extra, ataca duas vezes por ação, e a Cimitarra (Nick) deixa o ataque extra da propriedade Leve sair dentro da própria ação Atacar — a ação bônus fica livre pra Saraivada de Espinhos, Arma Mágica ou pra comandar a fera. A Espada Curta (Vex) dá vantagem no ataque seguinte contra o mesmo alvo. De longe, o Arco Curto causa 1d6+7, e Saraivada de Espinhos entra logo após o acerto. A fera age no seu turno: Esquivar é de graça, qualquer outra ação custa a ação bônus, e você pode sacrificar um ataque da ação Atacar pra ordenar o Golpe da Fera (+6, 1d8+5; se ela correr 6m antes, +1d6 e Caído). Aparar (reação) soma +3 na CA contra corpo a corpo até o próximo turno.'
+  tactic:'Abre o combate usando Marca do Predador (ação bônus) no alvo mais perigoso. Com Ataque Extra, ataca duas vezes por ação. A ação bônus pode ser usada para Saraivada de Espinhos, Arma Mágica ou para comandar a fera, conforme a situação e as maestrias realmente escolhidas. De longe, o Arco Curto causa 1d6+7, e Saraivada de Espinhos entra logo após o acerto. A fera age no seu turno: Esquivar é de graça, qualquer outra ação custa a ação bônus, e você pode sacrificar um ataque da ação Atacar pra ordenar o Golpe da Fera (+6, 1d8+5; se ela correr 6m antes, +1d6 e Caído). Aparar (reação) soma +3 na CA contra corpo a corpo até o próximo turno.'
 },
 {
   id:'matthyas', accent:'var(--c-matthyas)', name:'Matthyas Bisnerk', subtitle:'Ladino (Assassino) 6 · Humano',
@@ -430,34 +457,35 @@ const chars = [
   saves:'Destreza +7, Inteligência +2',
   classe:'Ladino Assassino',
   classTraits:[
-    ['Ataque Furtivo','+3d6 de dano uma vez por turno, ao atacar com vantagem (ou com aliado engajado no alvo) usando arma de acuidade ou à distância, desde que não tenha desvantagem no ataque.'],
+    ['Ataque Furtivo ','+3d6 de dano uma vez por turno, ao acertar com uma arma de Acuidade ou à Distância, com Vantagem na jogada de ataque ou quando um inimigo do alvo estiver a até 1,5 m dele e você não tiver Desvantagem.'],
     ['Especialista (Expertise)','Proficiência dobrada em Furtividade e Prestidigitação.'],
     ['Maestria em Arma','Maestria em dois tipos de armas: Rapieira e Besta de Mão.'],
     ['Ação Ardilosa','Ação bônus para Correr, Desengajar ou Esconder-se.'],
     ['Mira Firme','Ação bônus: vantagem na próxima jogada de ataque no turno atual — só se não tiver se movido neste turno. Após usar, Deslocamento vira 0 até o fim do turno.'],
-    ['Golpe Astuto','Gasta d6 do Ataque Furtivo (CD 15) pra efeito extra: Envenenar (-1d6, TR Constituição ou Envenenado 1min, repete no fim de cada turno do alvo) · Retirada (-1d6, move metade do Deslocamento sem provocar Ataque de Oportunidade) · Tropeço (-1d6, alvo Grande ou menor faz TR Destreza ou fica Caído).'],
+    ['Golpe Astuto ','Ao causar Ataque Furtivo, pode sacrificar 1d6 do dano para um efeito: Envenenar (salvaguarda de Constituição CD 15; se falhar, Envenenado por 1 minuto, repetindo a salvaguarda ao fim de cada turno; exige Kit de Veneno consigo) · Retirada (imediatamente após o ataque, move até metade do Deslocamento sem provocar Ataques de Oportunidade) · Tropeço (alvo Grande ou menor faz salvaguarda de Destreza CD 15 ou fica Caído).'],
     ['Esquiva Sobrenatural','Reação, quando um atacante que ele consegue ver acerta um golpe nele: reduz o dano daquele ataque pela metade.'],
-    ['Assassinar','Vantagem em jogadas de Iniciativa. Golpe Surpreendente: vantagem em ataques contra criatura que ainda não agiu no combate; contra alvo surpreso, dano adicional igual ao nível de Ladino (+5).'],
-    ['Talento: Velocista','+1 Destreza (já contado). Deslocamento +3m (já contado). Correr em terreno difícil não custa deslocamento extra. Ataques de Oportunidade contra ele têm desvantagem.'],
-    ['Mão Gélida (item narrativo)','Sua mão esquerda foi substituída por uma mão de gelo. Toda arma empunhada nessa mão ganha +1 no dano.']
+    ['Assassinar ','Você tem Vantagem nas jogadas de Iniciativa. Durante a primeira rodada de cada combate, tem Vantagem nos ataques contra qualquer criatura que ainda não tenha realizado seu turno. Se seu Ataque Furtivo atingir qualquer alvo nessa rodada, o alvo sofre dano adicional do tipo da arma igual ao seu nível de Ladino (+6).'],
+    ['Talento: Velocista','Aumenta a Destreza em 1 e o deslocamento em 3m. Correr em terreno difícil não custa deslocamento extra. Ataques de Oportunidade contra ele têm desvantagem.'],
+    ['Mão Gélida (item narrativo)','Sua mão esquerda foi substituída por uma mão de gelo. O bônus de dano não está aplicado aos ataques listados.']
   ],
   raceTraits:[
     ['Deslocamento','9m (base, antes do bônus de Velocista).'],
     ['Eficiente','Ganha Inspiração Heroica sempre que completa um Descanso Longo.'],
-    ['Hábil','Proficiência extra numa perícia à escolha: Furtividade e Prestidigitação.'],
+    ['Hábil','O traço Humano concede proficiência em uma perícia à escolha.'],
     ['Versátil','Ganha um Talento de Origem à escolha: Sortudo.'],
     ['Talento de Origem (Antecedente): Alerta','Proficiência em Iniciativa. Pode trocar sua Iniciativa com a de um aliado voluntário no mesmo combate.'],
     ['Sortudo','Pontos de Sorte = bônus de proficiência, restaurados em Descanso Longo. Gasta 1 ponto pra ter vantagem numa jogada de d20 sua, ou pra impor desvantagem na jogada de ataque de uma criatura contra ele.']
   ],
   actions:[
-    ['Rapieira', 7, '1d8+5 perfurante (+3d6 se furtivo se aplicar). Maestria: ao acertar, vantagem no próximo ataque contra o mesmo alvo antes do fim do seu próximo turno.'],
-    ['Espada curta', 7, '1d6+5 cortante (+3d6 se furtivo se aplicar). Maestria: ao acertar, vantagem no próximo ataque contra o mesmo alvo antes do fim do seu próximo turno.'],
-    ['Besta de mão', 7, '1d6+5 perfurante (+3d6 se furtivo se aplicar), alcance 9m/36m (desvantagem além de 9m). Maestria: ao acertar, vantagem no próximo ataque contra o mesmo alvo antes do fim do seu próximo turno.'],
-    ['Adaga', 7, '1d4+5 perfurante (+3d6 se furtivo se aplicar). Maestria: pode ser feito como parte da própria ação de Atacar, sem custar ação bônus, uma vez por turno.']
+    ['Rapieira', 7, '1d8+4 perfurante. Se Ataque Furtivo se aplicar, causa +3d6. Maestria — Vex: ao acertar uma criatura, você tem Vantagem na próxima jogada de ataque contra ela antes do fim do seu próximo turno.'],
+    ['Espada curta', 7, '1d6+4 perfurante. Se Ataque Furtivo se aplicar, causa +3d6. Maestria — Vex: ao acertar uma criatura, você tem Vantagem na próxima jogada de ataque contra ela antes do fim do seu próximo turno.'],
+    ['Besta de mão', 7, '1d6+4 perfurante, alcance 9m/36m. Se Ataque Furtivo se aplicar, causa +3d6. Ataques além de 9m têm Desvantagem. Maestria — Vex: ao acertar uma criatura, você tem Vantagem na próxima jogada de ataque contra ela antes do fim do seu próximo turno.'],
+    ['Adaga', 7, '1d4+4 perfurante, alcance de arremesso 6m/18m. Se Ataque Furtivo se aplicar, causa +3d6. Maestria — Nick: permite incluir o ataque extra da propriedade Leve na ação Atacar, em vez de usar uma Ação Bônus.'],
+    ['Cimitarra', 7, '1d6+4 cortante. Se Ataque Furtivo se aplicar, causa +3d6. Maestria — Nick: permite incluir o ataque extra da propriedade Leve na ação Atacar, em vez de usar uma Ação Bônus.']
   ],
   bonus:['Ação Ardilosa (Correr / Desengajar / Esconder-se)', 'Mira Firme (vantagem no próximo ataque, só se não se moveu)'],
   resources:[{key:'sortudo', label:'Sortudo', max:3, reset:'long'}, {key:'inspiracao', label:'Inspiração Heroica', max:1, reset:'long'}, {key:'sneak', label:'Ataque Furtivo', max:1, reset:'turn'}],
-  tactic:'Abre o combate puxando o máximo de dano possível: se esconde antes da luta e ataca surpreendendo o alvo — Golpe Surpreendente (vantagem + dano extra igual ao nível) junto com o furtivo pode resolver um inimigo sozinho no primeiro golpe. Em turnos parado (sem se mover), usa Mira Firme pra garantir vantagem no ataque. Golpe Astuto entra quando vale a pena trocar dano bruto por controle (Envenenar/Tropeço) ou reposicionamento seguro (Retirada). Daí em diante, segue o mesmo padrão da Surina: se estiver perto do alvo ou com um aliado adjacente a ele, usa isso pra manter o furtivo ativo; senão, prioriza se esconder de novo antes de atacar. Evita ficar parado perto do inimigo — ataca e desengaja (Ação Ardilosa) sempre que possível.'
+  tactic:'Abre o combate buscando Vantagem na Iniciativa. Na primeira rodada, Assassinar concede Vantagem contra criaturas que ainda não tiveram turno; se o Ataque Furtivo acertar nessa rodada, acrescenta +6 de dano do tipo da arma, além do Ataque Furtivo. Em turnos parado (sem se mover), usa Mira Firme pra garantir vantagem no ataque. Golpe Astuto entra quando vale a pena trocar dano bruto por controle (Envenenar/Tropeço) ou reposicionamento seguro (Retirada). Daí em diante, segue o mesmo padrão da Surina: se estiver perto do alvo ou com um aliado adjacente a ele, usa isso pra manter o furtivo ativo; senão, prioriza se esconder de novo antes de atacar. Evita ficar parado perto do inimigo — ataca e desengaja (Ação Ardilosa) sempre que possível.'
 },
 {
   id:'surina', accent:'var(--c-surina)', name:'Surina Narghat', subtitle:'Ladina (Assaltante) 6 · Draconato Vermelho',
@@ -500,7 +528,7 @@ const chars = [
     ['Formas Circulares','A partir do 2º nível, pode virar besta de ND até 1 (não só 1/4), sem voar nem nadar ainda. No 6º nível o limite de ND sobe (nível ÷ 3), nadar libera no 4º nível e voar só no 8º.']
   ],
   raceTraits:[
-    ['Visão no Escuro','18m.'],
+    ['Visão no Escuro','Enxerga na penumbra a até 18 m como se fosse luz plena e na escuridão como se fosse penumbra.'],
     ['Ancestral Feérico','Vantagem em testes de resistência contra ficar encantado. Imune a ser posto pra dormir por magia.'],
     ['Versatilidade de Perícia','Proficiência em duas perícias à escolha — confirme quais.']
   ],
@@ -544,7 +572,7 @@ const chars = [
       ['Sentido Bestial','ação · toque · conc. 1h (ritual)','Toca uma besta voluntária. Pode usar a ação pra ver e ouvir pelos sentidos dela (inclusive sentidos especiais que ela tenha), ficando cega e surda aos próprios sentidos enquanto isso.']
     ]},
     {group:'Magias preparadas (3º círculo)', items:[
-      ['Convocar Relâmpagos','ação · conc. 10min','Cria uma nuvem de tempestade (cilindro de 3m de altura, 18m de raio) num ponto visível acima de você. Ao conjurar, e em cada turno seguinte usando a ação, chama um raio num ponto sob a nuvem: cada criatura a até 1,5m do ponto faz TR de Destreza, sofrendo 3d10 de elétrico (4d10 se estiver ao ar livre numa tempestade já em curso), metade no sucesso.'],
+      ['Convocar Relâmpagos','ação · conc. 10min','Cria uma nuvem de tempestade (cilindro de 3m de altura, 18m de raio) num ponto visível acima de você. Ao conjurar, e em cada turno seguinte usando a ação, chama um raio num ponto sob a nuvem: cada criatura a até 1,5m do ponto faz TR de Destreza, sofrendo 3d10 de elétrico (4d10 se estiver ao ar livre numa tempestade já em curso), metade no sucesso. <strong>Ajuste específico da Ætheoflæd: +2 na CD do teste de resistência desta magia.</strong>'],
       ['Conjurar Animais','ação · alcance 18m · conc. 1h','Invoca espíritos feéricos em forma de besta pra lutar ao seu lado: escolha 1 besta de ND 2, 2 de ND 1, 4 de ND 1/2, ou 8 de ND 1/4 (o mestre fornece as estatísticas). Elas agem como aliadas, obedecem seus comandos e rolam iniciativa própria.'],
       ['Dissipar Magia','ação · alcance 36m','Encerra uma magia ativa de nível 3 ou menor num alvo. Contra magia de nível 4+, faz um teste de habilidade de conjuração (CD 10 + nível da magia) pra ver se dissipa.'],
       ['Muralha de Vento','ação · alcance 36m · conc. 1min','Cria uma muralha de vento forte (até 15m de comprimento, 4,5m de altura, 0,3m de grossura) num formato contínuo à escolha. Bloqueia fumaça, neblina, gases e projéteis pequenos ou menores; criaturas voadoras pequenas ou menores não conseguem atravessar. Criaturas Grandes ou menores que tentem atravessar fazem TR de Força ou são jogadas de volta.']
@@ -559,14 +587,14 @@ const chars = [
   saves:'Sabedoria +6, Carisma +5',
   classe:'Clériga Domínio da Vida',
   classTraits:[
-    ['Conjuração','<br>• <span class="hl">CD das magias</span> = 14<br>• <span class="hl">Modificador de ataque mágico</span> = +6<br>• 9 magias preparadas e 4 truques<br>• É possível <span class="hl">conjurar qualquer magia como um ritual</span>, ou seja <span class="hl">sem gastar espaços de magia</span> (mas elas passam a <span class="hl">demorar 10 minutos</span> para serem conjuradas)<br>• A lista de magias preparadas pode ser <span class="hl">redefinida a cada descanso longo</span><br>• Você possui 6 magias sempre aprendidas do seu domínio'],
+    ['Conjuração','<br>• <span class="hl">CD das magias</span> = 14<br>• <span class="hl">Modificador de ataque mágico</span> = +6<br>• 9 magias preparadas e 4 truques<br>• Magias com a propriedade Ritual podem ser conjuradas como ritual, sem gastar espaços de magia; a conjuração demora 10 minutos adicionais<br>• A lista de magias preparadas pode ser <span class="hl">redefinida a cada descanso longo</span><br>• Você possui 6 magias sempre aprendidas do seu domínio'],
     ['Discípula da Vida','Magias de cura que restauram PV curam uma quantidade extra igual a 2 + o nível da magia (do espaço usado). Ex: magia de 1º círculo cura +3 a mais; de 2º círculo, +4 a mais.'],
-    ['Curandeira Abençoada','As magias que conjura para curar os outros também curam ela. Ao conjurar uma magia de cura em outra criatura, recupera PV em um total de 2 + nível da magia.'],
+    ['Curandeira Abençoada','Quando conjura uma magia de 1º círculo ou superior que restaura PV de outra criatura, Nephile recupera PV para si mesma em quantidade igual a 2 + o círculo do espaço de magia usado. Esse bônus cura Nephile, não aumenta a cura recebida pelo alvo.'],
     ['Canalizar Divindade: Preservar Vida','Uma vez por descanso: distribui um total de 30 PV (5x nível de clériga) entre criaturas a 9m, até metade do PV máximo de cada uma. Não precisa de teste de ataque.'],
     ['Canalizar Divindade: Destruir Mortos-Vivos','A partir do 5º nível, ao usar a versão de Expulsar Mortos-Vivos: mortos-vivos de ND 1/2 ou menos que falharem no TR de Sabedoria são destruídos automaticamente, em vez de só ficarem amedrontados.']
   ],
   raceTraits:[
-    ['Visão no Escuro','18m.'],
+    ['Visão no Escuro','Enxerga na penumbra a até 18 m como se fosse luz plena e na escuridão como se fosse penumbra.'],
     ['Ancestral Feérico','Vantagem em testes de resistência contra ficar encantado. Imune a ser posto pra dormir por magia.'],
     ['Versatilidade de Perícia','Proficiência em duas perícias à escolha — confirme quais.']
   ],
@@ -578,35 +606,35 @@ const chars = [
   resources:[{key:'lvl1', label:'1º Círculo', max:4, reset:'long'},{key:'lvl2', label:'2º Círculo', max:3, reset:'long'},{key:'lvl3', label:'3º Círculo', max:3, reset:'long'},{key:'channel', label:'Canalizar Divindade', max:2, reset:'short'}],
   spells:[
     {group:'Truques', items:[
-      ['Chama Sagrada','ação · alcance 18m','Ataque de magia à distância; alvo faz TR de Destreza; 1d8 radiante. A cobertura normal não ajuda o alvo a evitar essa magia.'],
-      ['Poupar o Moribundo','ação · toque','Estabiliza uma criatura a 0 PV sem gastar uma cura de verdade.'],
-      ['Taumaturgia','ação · alcance 9m','Efeito menor de manifestação divina (voz alta, portas abrindo/fechando, luzes tremulando); utilidade, não combate.'],
-      ['Orientação','ação · toque · conc. 1min','Toca uma criatura voluntária. Antes da magia acabar, o alvo pode rolar 1d4 e somar a um teste de habilidade (perícia ou atributo) à escolha dele — não vale pra ataque nem TR.']
+      ['Chama Sagrada','ação · alcance 18m',M('ação','18 m','instantânea')+'O alvo faz um teste de resistência de Destreza; sofre 1d8 de dano radiante se falhar. A cobertura normal não ajuda o alvo a evitar esta magia.'],
+      ['Poupar o Moribundo','ação · toque',M('ação','toque','instantânea')+'Uma criatura viva a 0 PV fica estável.'],
+      ['Taumaturgia','ação · alcance 9m',M('ação','9 m','até 1 minuto')+'Manifestações divinas menores, como voz ampliada, chamas tremulantes ou portas abrindo e fechando.'],
+      ['Orientação','ação · toque · conc.',M('ação','toque','conc., até 1 minuto')+'Toca uma criatura voluntária. Antes da magia acabar, ela pode rolar 1d4 e somar o resultado a um teste de atributo.']
     ]},
     {group:'Magias de domínio (sempre preparadas)', items:[
-      ['Bênção','ação · conc. 1min','Até 3 criaturas somam 1d4 em ataques e testes de resistência.'],
-      ['Curar Ferimentos','ação · toque','Cura 1d8 + Sabedoria, mais 3 a mais pela Discípula da Vida (2 + nível da magia, aqui 1º círculo).'],
-      ['Arma Espiritual','ação bônus · conc. até recast','Cria uma arma espectral que ataca (1d8 + Sabedoria força). Pode mover e repetir o ataque em ação bônus nos turnos seguintes.'],
-      ['Restauração Menor','ação · toque','Remove uma condição (cego, surdo, paralisado, envenenado etc.) ou uma doença.'],
-      ['Sinal de Esperança','ação · alcance 9m · conc. 1min','Até criaturas à sua escolha na área ganham vantagem em testes de resistência de Sabedoria e testes de morte, e recuperam o máximo possível de PV em qualquer cura que receberem enquanto a magia durar.'],
-      ['Revivificar','ação · toque','Toca uma criatura morta há no máximo 1 minuto; ela volta à vida com 1 PV (não restaura partes do corpo faltando). Consome componente material caro (300po em diamantes).']
+      ['Bênção','ação · conc.',M('ação','9 m','conc., até 1 minuto')+'Até 3 criaturas somam 1d4 às jogadas de ataque e aos testes de resistência.'],
+      ['Curar Ferimentos','ação · toque',M('ação','toque','instantânea')+'Cura 1d8 + Sabedoria, mais 3 PV pela Discípula da Vida (magia de 1º círculo).'],
+      ['Arma Espiritual','ação bônus',M('ação bônus','18 m','1 minuto')+'Cria uma arma espectral que ataca causando 1d8 + Sabedoria de dano de força. Nos turnos seguintes, pode ser movida e usada para atacar com uma ação bônus.'],
+      ['Restauração Menor','ação · toque',M('ação','toque','instantânea')+'Encerra uma condição como cego, surdo, paralisado ou envenenado, ou cura uma doença.'],
+      ['Sinal de Esperança','ação · conc.',M('ação','9 m','conc., até 1 minuto')+'Criaturas escolhidas na área têm vantagem em testes de resistência de Sabedoria e testes contra a morte, e recuperam o máximo possível de PV de qualquer cura recebida.'],
+      ['Revivificar','ação · toque',M('ação','toque','instantânea')+'Toca uma criatura que morreu há no máximo 1 minuto; ela volta à vida com 1 PV. Consome diamantes no valor de 300 po.']
     ]},
     {group:'Magias preparadas (escolhidas)', items:[
-      ['Infligir Ferimentos','ação · corpo a corpo com magia','3d10 dano necrótico. Maior dano direto dela, mas precisa chegar perto.'],
-      ['Escudo da Fé','ação bônus · conc. 10min','+2 de CA numa criatura.'],
-      ['Perdição','ação · conc. 1min','Até 3 inimigos sofrem -1d4 em ataques e testes de resistência (TR de Carisma).'],
-      ['Raio Guiador','ação · alcance 36m','Ataque à distância com magia; 4d6 radiante, e dá vantagem no próximo ataque de qualquer aliado contra o alvo.'],
-      ['Comando','ação · alcance 18m','Uma criatura visível faz TR de Sabedoria ou obedece uma palavra única no próprio turno seguinte (ex: Caia, Fuja, Largue, Aproxime-se, Pare). Sem efeito em mortos-vivos ou quem não entende seu idioma; magia não pode ser diretamente nociva.'],
-      ['Imobilizar Pessoas','ação · alcance 18m · conc. 1min','Um humanoide faz TR de Sabedoria ou fica paralisado; repete o teste no fim de cada turno dele.'],
-      ['Ajuda','ação','Até 3 criaturas ganham +5 PV máximos (e atuais) por 8 horas — usar antes de um combate difícil, não durante.'],
-      ['Oração Curativa','10 minutos','Até 6 criaturas à sua escolha, dentro de 9m, recuperam 2d8 + Sabedoria de PV cada uma (mais 3 a mais por cura, pela Discípula da Vida). Tempo de conjuração longo — só fora de combate, entre uma luta e outra.'],
-      ['Falar com os Mortos','ação · 10min de duração','Reanima o espírito de um cadáver pra responder até 5 perguntas suas. Ele só sabe o que sabia em vida, respostas costumam ser curtas ou enigmáticas, e ele não é obrigado a responder com sinceridade se te reconhecer como hostil.'],
-      ['Animar Mortos','1 minuto (fora de combate)','Transforma uma pilha de ossos num esqueleto ou um cadáver num zumbi sob seu comando por 24h (o mestre fornece as estatísticas). Comanda mentalmente como ação bônus a até 18m. Tempo de conjuração longo — não dá pra usar no meio de uma luta, só entre combates. Vale conferir com o grupo e o mestre antes de usar, já que a maioria das mesas trata isso como um ato de temática sombria.'],
-      ['Espíritos Guardiões','ação · conc. 10min','Cria uma emanação de 4,5m ao seu redor. Deslocamento de inimigos na área cai pela metade. Sempre que uma criatura entra na área ou começa o turno lá, faz TR de Sabedoria (uma vez por turno): se falhar, sofre 3d8 radiante (ou necrótico, dependendo do seu alinhamento), metade no sucesso.'],
-      ['Zona da Verdade','ação · alcance 18m · 10min','Esfera de 4,5m de raio num ponto à sua escolha. Quem entra na área pela primeira vez num turno ou começa o turno nela faz TR de Carisma; se falhar, não consegue mentir deliberadamente dentro da área. Você sabe quem passou ou falhou. A criatura afetada sabe da magia e pode se esquivar de responder, desde que se mantenha dentro da verdade.']
+      ['Infligir Ferimentos','ação · ataque corpo a corpo com magia',M('ação','toque','instantânea')+'Ataque mágico corpo a corpo; causa 3d10 de dano necrótico se acertar.'],
+      ['Escudo da Fé','ação bônus · conc.',M('ação bônus','18 m','conc., até 10 minutos')+'Uma criatura recebe +2 de CA enquanto a magia durar.'],
+      ['Perdição','ação · conc.',M('ação','9 m','conc., até 1 minuto')+'Até 3 criaturas fazem TR de Carisma; se falharem, subtraem 1d4 de suas jogadas de ataque e testes de resistência.'],
+      ['Raio Guiador','ação · alcance 36m',M('ação','36 m','1 rodada')+'Ataque mágico à distância que causa 4d6 de dano radiante. O próximo ataque contra o alvo antes do fim do seu próximo turno tem vantagem.'],
+      ['Comando','ação · alcance 18m',M('ação','18 m','1 rodada')+'Uma criatura que entenda você faz TR de Sabedoria ou obedece a uma ordem de uma palavra no próximo turno. Não funciona em mortos-vivos.'],
+      ['Imobilizar Pessoas','ação · conc.',M('ação','18 m','conc., até 1 minuto')+'Um humanoide faz TR de Sabedoria ou fica paralisado. Repete o teste no fim de cada turno.'],
+      ['Ajuda','ação',M('ação','9 m','8 horas')+'Até 3 criaturas aumentam seus PV máximos e atuais em 5 durante a duração.'],
+      ['Oração Curativa','10 minutos',M('10 minutos','9 m','instantânea')+'Até 6 criaturas escolhidas recuperam 2d8 + Sabedoria PV cada uma, além da cura adicional da Discípula da Vida.'],
+      ['Falar com os Mortos','ação',M('ação','3 m','10 minutos')+'Concede animação temporária a um cadáver para responder até 5 perguntas sobre o que sabia em vida.'],
+      ['Animar Mortos','1 minuto',M('1 minuto','3 m','instantânea')+'Transforma uma pilha de ossos em esqueleto ou um cadáver em zumbi, que fica sob seu controle por 24 horas. Pode comandá-lo mentalmente com ação bônus a até 18 m.'],
+      ['Espíritos Guardiões','ação · conc.',M('ação','pessoal (emanação de 4,5 m)','conc., até 10 minutos')+'Criaturas inimigas na área têm deslocamento reduzido à metade. Quando entram na área pela primeira vez no turno ou começam o turno nela, fazem TR de Sabedoria; se falharem, sofrem 3d8 de dano radiante ou necrótico, metade no sucesso.'],
+      ['Zona da Verdade','ação',M('ação','18 m','10 minutos')+'Cria uma esfera de 4,5 m de raio. Criaturas que falharem no TR de Carisma não conseguem mentir deliberadamente na área; você sabe quem passou ou falhou.']
     ]}
   ],
-  tactic:'Fica atrás da linha de frente, ou entra no meio do combate se conjurar Espíritos Guardiões (ação normal) — a emanação de 4,5m causa dano contínuo em quem passar perto ou começar o turno ali, então vale a pena ela se aproximar depois de conjurar. Guarda o Preservar Vida (25 PV pra distribuir) pra depois de uma rodada ruim, não gasta cedo com dano pequeno. Prefere Raio Guiador ou Infligir Ferimentos como dano — besta leve e martelo de guerra têm limitações (a besta não pode ser usada junto com o escudo, e o martelo não tem proficiência). Revivificar é a rede de segurança se alguém cair — vale lembrar que precisa dos diamantes.'
+  tactic:'Fica atrás da linha de frente, ou entra no meio do combate se conjurar Espíritos Guardiões (ação normal) — a emanação de 4,5m causa dano contínuo em quem passar perto ou começar o turno ali, então vale a pena ela se aproximar depois de conjurar. Guarda o Preservar Vida (até 30 PV pra distribuir) pra depois de uma rodada ruim, não gasta cedo com dano pequeno. Prefere Raio Guiador ou Infligir Ferimentos como dano — besta leve e martelo de guerra têm limitações (a besta não pode ser usada junto com o escudo, e o martelo não tem proficiência). Revivificar é a rede de segurança se alguém cair — vale lembrar que precisa dos diamantes.'
 },
 {
   id:'thireon', accent:'var(--c-thireon)', name:'Tyrion', subtitle:'Guerreiro (Mestre de Batalha) 6 · Anão da Montanha',
@@ -625,7 +653,7 @@ const chars = [
     ['Manobra: Golpe Arrasador','Ao acertar um ataque: soma o dado ao dano e força o alvo a um TR de Força (CD 16); se falhar, cai caído.']
   ],
   raceTraits:[
-    ['Visão no Escuro','18m.'],
+    ['Visão no Escuro','Enxerga na penumbra a até 18 m como se fosse luz plena e na escuridão como se fosse penumbra.'],
     ['Resiliência Anã','Vantagem em testes de resistência contra veneno; resistência a dano de veneno.'],
     ['Treinamento em Armas Anãs','Proficiência com machado de batalha, machadinha, martelo leve e martelo de guerra.'],
     ['Treinamento com Armadura Anã','Proficiência com armadura leve e média (redundante aqui, já que a classe de Guerreiro já cobre isso e mais: pesada também).']
@@ -658,7 +686,7 @@ const chars = [
     ['Técnica Bêbada (Mestre Bêbado)','Ao usar Rajada de Golpes, ganha automaticamente o benefício da ação Desengajar e seu deslocamento aumenta em 3m até o fim do turno — sem custo de ki adicional.']
   ],
   raceTraits:[
-    ['Visão no Escuro','18m.'],
+    ['Visão no Escuro','Enxerga na penumbra a até 18 m como se fosse luz plena e na escuridão como se fosse penumbra.'],
     ['Resistência Infernal','Resistência a dano de fogo.'],
     ['Legado Infernal','Truque e magia reativa próprios — listados na seção de Magias abaixo pra ficarem à mão durante o combate.']
   ],
@@ -675,7 +703,7 @@ const chars = [
       ['Repreensão Infernal','reação · alcance 18m · 1x descanso longo','Quando sofre dano de uma criatura visível a até 18m, pode usar a reação pra envolvê-la em chamas: TR de Destreza (CD 12) ou sofre 3d10 de dano de fogo (metade no sucesso). Já vem automaticamente conjurada como magia de 2º círculo (upada), por isso o dano maior que o normal de 1º círculo.']
     ]}
   ],
-  tactic:'Entra rápido (12m de deslocamento) e ataca com o bordão de duas mãos (1d8+3), agora duas vezes por turno com Ataque Extra. Golpe Atordoante é a grande novidade: gastar 1 ki pra tentar atordoar um alvo perigoso pode travar o turno dele por completo — vale mais em um ataque que já vai acertar mesmo. Usa Rajada de Golpes quando quiser ainda mais ataques numa rodada — a Técnica Bêbada já vem junto sem custo extra, então ela bate várias vezes e sai sem sofrer ataque de oportunidade. Guarda a Repreensão Infernal pra revidar um golpe grande que valha a pena (3d10 é dano alto). Gerencia os 5 pontos de ki com cautela: não gasta tudo cedo, guarda pelo menos 1 pra Defesa Paciente se ficar com PV baixo.'
+  tactic:'Entra rápido (12m de deslocamento) e ataca com o bordão de duas mãos (1d8+3), agora duas vezes por turno com Ataque Extra. Golpe Atordoante é a grande novidade: gastar 1 ki pra tentar atordoar um alvo perigoso pode travar o turno dele por completo — vale mais em um ataque que já vai acertar mesmo. Usa Rajada de Golpes quando quiser ainda mais ataques numa rodada — a Técnica Bêbada já vem junto sem custo extra, então ela bate várias vezes e sai sem sofrer ataque de oportunidade. Guarda a Repreensão Infernal pra revidar um golpe grande que valha a pena (3d10 é dano alto). Gerencia os 6 pontos de ki com cautela: não gasta tudo cedo, guarda pelo menos 1 pra Defesa Paciente se ficar com PV baixo.'
 }
 ];
 
@@ -745,8 +773,8 @@ chars.forEach((c,i)=>{
       group.items.forEach(sp=>{
         spellsHtml += `
         <details class="spell">
-          <summary>${sp[0]}<span class="lvl">${sp[1]}</span></summary>
-          <p>${sp[2]}</p>
+          <summary>${sp[0]}<span class="lvl">${spellSummary(sp)}</span></summary>
+          <p>${spellDescription(sp)}</p>
           ${sp[3] ? `<div class="spell-uses"><div class="res-dots">${Array.from({length:sp[3].max},(_,d)=>`<span class="res-dot" data-charid="${c.id}" data-key="${sp[3].key}" data-reset="${sp[3].reset}" data-idx="${d}"></span>`).join('')}</div></div>` : ''}
         </details>`;
       });
