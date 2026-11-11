@@ -390,12 +390,12 @@ const chars = [
     ['Arco Curto', 7, '1d6+7 perfurante (+4 DES, +3 Cianita).'],
     ['Golpe da Fera (comando)', 6, '1d8+5 Contundente. Sacrifica um dos seus ataques da ação Atacar para ordenar o Golpe da Fera. Se a fera se moveu 6m ou mais em direção ao alvo antes do acerto: +1d6 do mesmo tipo e o alvo fica Caído (Grande ou menor). Ficha completa da fera logo abaixo.']
   ],
-  bonus:['Marca do Predador (3x)','Saraivada de Espinhos','Arma Mágica','Palavra Curativa (1x)','Comandar a fera (qualquer ação além de Esquivar)'],
+  bonus:['Marca do Predador (3x)','Saraivada de Espinhos','Arma Mágica','Golpe de Zephyr','Palavra Curativa (1x)','Comandar a fera (qualquer ação além de Esquivar)'],
   resources:[{key:'marca', label:'Marca do Predador', max:3, reset:'long'}, {key:'lvl1', label:'1º Círculo', max:4, reset:'long'}, {key:'lvl2', label:'2º Círculo', max:2, reset:'long'}],
   spells:[
     {group:'Magias sempre aprendidas', items:[
       ['Marca do Predador','ação bônus · conc. 1h','Marca uma criatura visível como presa: todo ataque seu que acertar ela causa +1d6 de dano Energético extra. Vantagem em Percepção ou Sobrevivência pra rastreá-la. Se o alvo morrer antes do fim da magia, pode transferir a marca pra outro alvo com uma ação bônus.'],
-      ['Palavra Curativa','ação bônus','Cura 1d4 + Sabedoria numa criatura visível a até 18m. <b>Uso sem gastar espaço</b> (Iniciado em Magia), 1x por descanso longo:',{key:'palavra',max:1,reset:'long'}],
+      ['Palavra Curativa','ação bônus','Cura 2d4 + Sabedoria numa criatura visível a até 18m. <b>Uso sem gastar espaço</b> (Iniciado em Magia), 1x por descanso longo:',{key:'palavra',max:1,reset:'long'}],
       ['Passos Largos','ação · conc.','+10 pés (3m) de deslocamento no alvo tocado. <b>Uso sem gastar espaço</b> (racial), 1x por descanso longo:',{key:'largos',max:1,reset:'long'}],
       ['Passos sem Rastro','ação · conc. 1h','Cada criatura à sua escolha a até 9m (incluindo você) ganha +10 em testes de Destreza (Furtividade) e não pode ser rastreada por meios não-mágicos. <b>Uso sem gastar espaço</b> (racial), 1x por descanso longo:',{key:'semrastro',max:1,reset:'long'}]
     ]},
@@ -405,7 +405,7 @@ const chars = [
       ['Arma Mágica','ação bônus · toque · 1h','A arma tocada vira mágica e recebe +1 nas jogadas de ataque e de dano. Não exige concentração.'],
       ['Auxílio','ação · alcance 9m · 8h','Até 3 criaturas à sua escolha ganham +5 nos PV máximos e nos PV atuais enquanto durar a magia.'],
       ['Falar com Animais','ação (ritual)','Permite comunicação com bestas por 10 minutos; elas entendem você e podem compartilhar informações da região.'],
-      ['Curar Ferimentos','ação · toque','Cura 1d8 + Sabedoria.']
+      ['Golpe de Zephyr','ação bônus · pessoal · conc. 1min','Você se move como o vento: até o fim da magia, seu movimento não provoca ataques de oportunidade. Uma vez até o fim da magia, você pode se dar vantagem numa jogada de ataque com arma no seu turno; se o ataque acertar, causa +1d8 de dano Energético extra. Acertando ou errando, seu deslocamento aumenta em 9m até o final desse turno.']
     ]},
     {group:'Truques', items:[
       ['Arte Druídica','ação','Cria efeitos sensoriais menores (faíscas, símbolos, cheiros) — utilidade, não combate.'],
@@ -609,7 +609,7 @@ const chars = [
   tactic:'Fica atrás da linha de frente, ou entra no meio do combate se conjurar Espíritos Guardiões (ação normal) — a emanação de 4,5m causa dano contínuo em quem passar perto ou começar o turno ali, então vale a pena ela se aproximar depois de conjurar. Guarda o Preservar Vida (25 PV pra distribuir) pra depois de uma rodada ruim, não gasta cedo com dano pequeno. Prefere Raio Guiador ou Infligir Ferimentos como dano — besta leve e martelo de guerra têm limitações (a besta não pode ser usada junto com o escudo, e o martelo não tem proficiência). Revivificar é a rede de segurança se alguém cair — vale lembrar que precisa dos diamantes.'
 },
 {
-  id:'thireon', accent:'var(--c-thireon)', name:'Tiryon', subtitle:'Guerreiro (Mestre de Batalha) 6 · Anão da Montanha',
+  id:'thireon', accent:'var(--c-thireon)', name:'Tyrion', subtitle:'Guerreiro (Mestre de Batalha) 6 · Anão da Montanha',
   ac:18, hp:62, speed:'7,5m', initValue:-1, initFormula:'Destreza',
   abilities:[['FOR',20,'+5'],['DES',8,'-1'],['CON',16,'+3'],['INT',12,'+1'],['SAB',14,'+2'],['CAR',10,'+0']],
   saves:'Força +8, Constituição +6',
@@ -633,7 +633,7 @@ const chars = [
   actions:[
     ['Machado de batalha (uma mão + escudo)', 8, '1d8+9 cortante.'],
     ['Machado de batalha (duas mãos, versátil)', 8, '1d10+7 cortante.'],
-    ['Machadinha (corpo a corpo ou arremesso)', 8, '1d6+5 cortante. Arremessável: alcance normal 6m, máximo 18m (desvantagem entre 6m e 18m).']
+    ['Machadinha (corpo a corpo ou arremesso)', 8, '1d6+7 cortante. Arremessável: alcance normal 6m, máximo 18m (desvantagem entre 6m e 18m).']
   ],
   bonus:['Retomar o Fôlego (1x por descanso)'],
   resources:[{key:'sup', label:'Dados de Superioridade (d8)', max:4, reset:'short'},{key:'secondwind', label:'Retomar o Fôlego', max:1, reset:'short'},{key:'actionsurge', label:'Surto de Ação', max:1, reset:'short'}],
